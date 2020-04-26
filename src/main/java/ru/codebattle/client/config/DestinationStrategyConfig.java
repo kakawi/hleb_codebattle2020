@@ -22,7 +22,7 @@ public class DestinationStrategyConfig {
 	}
 
 	@Bean
-	@Primary
+//	@Primary
 	public DestinationStrategy destroyerStrategy() {
 		return new DestroyerStrategy();
 	}
@@ -38,6 +38,7 @@ public class DestinationStrategyConfig {
 	}
 
 	@Bean
+	@Primary
 	public DestinationStrategy nearestBombermanStrategy() {
 		return new NearestBombermanStrategy();
 	}

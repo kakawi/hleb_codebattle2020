@@ -91,7 +91,7 @@ class PathCalculatorTest extends Specification {
 			nextPoint == board.getPoint(2, 3).get()
 	}
 
-	def "2 walls STOP"() {
+	def "2 walls - Don't stand on the same place"() {
 		given:
 			String map = '''
 				☼☼☼☼☼☼☼☼
@@ -108,7 +108,7 @@ class PathCalculatorTest extends Specification {
 		when:
 			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
-			nextPoint == board.getPoint(2, 4).get()
+			nextPoint != board.getPoint(2, 4).get()
 	}
 
 	def "2 walls not stop"() {
@@ -217,5 +217,29 @@ class PathCalculatorTest extends Specification {
 			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
 		then:
 			nextPoint == bomberman.shiftRight().get() || nextPoint == bomberman.shiftLeft().get()
+	}
+
+	def "situation #2 - near MeatChopper"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼☼☼☼
+				☼         ☼
+				☼         ☼
+				☼         ☼
+				☼         ☼
+				☼         ☼
+				☼ #       ☼
+				☼  ☼☼☼☼☼☼ ☼
+				☼  & ☺    ☼
+				☼       4 ☼
+				☼☼☼☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			TypedBoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
+			TypedBoardPoint bomberman = board.getBomberman()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+		then:
+			nextPoint != bomberman.shiftLeft().get()
 	}
 }

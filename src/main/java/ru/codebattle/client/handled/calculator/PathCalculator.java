@@ -27,13 +27,19 @@ public class PathCalculator {
 		alreadyOpenedPoints.add(currentMinPoint);
 		visitedPoints.add(currentMinPoint);
 
-		Optional<PathPoint> optionalLastPoint = getLastPoint(destinationPoint, currentMinPoint, alreadyOpenedPoints, visitedPoints);
-		// didn't find the way (it may be blocked)
-		if (optionalLastPoint.isEmpty() || optionalLastPoint.get().getPoint().equals(initialPosition)) {
-			if (doINeedToTrySurvive(initialPosition)) {
-				return lastChanceMoveFrom(initialPosition);
-			}
-			return initialPosition;
+		Optional<PathPoint> optionalLastPoint = getPathToDestination(destinationPoint, currentMinPoint, alreadyOpenedPoints, visitedPoints);
+
+		// didn't find the way - Don't stand on the same place
+		if (optionalLastPoint.isEmpty()) {
+			return theBestMove(initialPosition);
+		}
+
+		// already stay where we want - Don't stand on the same place
+		if (optionalLastPoint.get().equals(currentMinPoint)) {
+//			if (doINeedToTrySurvive(initialPosition)) {
+			return theBestMove(initialPosition);
+//			}
+//			return initialPosition;
 		}
 
 		PathPoint lastPathPoint = optionalLastPoint.get();
@@ -45,7 +51,7 @@ public class PathCalculator {
 		ExplosionInfo nextMoveExplosionInfo = lastPathPoint.getPoint().getExplosionInfo();
 		if (nextMoveExplosionInfo.getStatus() == ExplosionStatus.NEXT_TICK) {
 			// TODO recheck: do we need `find the best` or just stay
-			return lastChanceMoveFrom(initialPosition);
+			return theBestMove(initialPosition);
 		}
 
 		return lastPathPoint.getPoint();
@@ -55,7 +61,7 @@ public class PathCalculator {
 		return initialPosition.getExplosionInfo().getStatus() == ExplosionStatus.NEXT_TICK;
 	}
 
-	private TypedBoardPoint lastChanceMoveFrom(TypedBoardPoint centerPoint) {
+	private TypedBoardPoint theBestMove(TypedBoardPoint centerPoint) {
 		return Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint.shiftLeft(), Optional.of(centerPoint))
 					 .filter(Optional::isPresent)
 					 .map(Optional::get)
@@ -67,7 +73,7 @@ public class PathCalculator {
 					 .orElse(centerPoint);
 	}
 
-	private Optional<PathPoint> getLastPoint(
+	private Optional<PathPoint> getPathToDestination(
 			TypedBoardPoint destinationPoint,
 			PathPoint currentMinPoint,
 			Set<PathPoint> alreadyOpenedPoints,
