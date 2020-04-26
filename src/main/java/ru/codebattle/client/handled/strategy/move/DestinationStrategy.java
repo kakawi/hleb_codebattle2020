@@ -5,6 +5,6 @@ import ru.codebattle.client.handled.TypedBoardPoint;
 
 import java.util.Optional;
 
-public interface Strategy {
+public interface DestinationStrategy {
 	Optional<TypedBoardPoint> getDestinationBoardPoint(HandledGameBoard gameBoard);
 }

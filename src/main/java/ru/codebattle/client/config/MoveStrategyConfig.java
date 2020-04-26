@@ -4,8 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import ru.codebattle.client.handled.strategy.move.NearestBombermanStrategy;
+import ru.codebattle.client.handled.strategy.move.NearestMeatChopperStrategy;
 import ru.codebattle.client.handled.strategy.move.NearestWallStrategy;
-import ru.codebattle.client.handled.strategy.move.Strategy;
+import ru.codebattle.client.handled.strategy.move.DestinationStrategy;
 import ru.codebattle.client.handled.strategy.move.StrategyManager;
 
 import java.util.Collections;
@@ -14,18 +15,23 @@ import java.util.Collections;
 public class MoveStrategyConfig {
 
 	@Bean
-	public StrategyManager strategyManager(Strategy strategy) {
-		return new StrategyManager(Collections.singletonList(strategy));
+	public StrategyManager strategyManager(DestinationStrategy destinationStrategy) {
+		return new StrategyManager(Collections.singletonList(destinationStrategy));
 	}
 
 	@Bean
 	@Primary
-	public Strategy nearestBombermanStrategy() {
+	public DestinationStrategy nearestMeatChopperStrategy() {
+		return new NearestMeatChopperStrategy();
+	}
+
+	@Bean
+	public DestinationStrategy nearestBombermanStrategy() {
 		return new NearestBombermanStrategy();
 	}
 
 	@Bean
-	public Strategy nearestWallStrategy() {
+	public DestinationStrategy nearestWallStrategy() {
 		return new NearestWallStrategy();
 	}
 }

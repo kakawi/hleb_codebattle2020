@@ -5,7 +5,7 @@ import ru.codebattle.client.handled.TypedBoardPoint;
 
 import java.util.Optional;
 
-public class FarthestWallStrategy implements Strategy {
+public class FarthestWallStrategy implements DestinationStrategy {
 
 	@Override
 	public Optional<TypedBoardPoint> getDestinationBoardPoint(HandledGameBoard gameBoard) {

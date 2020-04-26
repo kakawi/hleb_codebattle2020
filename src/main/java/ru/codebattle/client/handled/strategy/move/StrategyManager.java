@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public class StrategyManager {
 
-	private final List<Strategy> strategies;
+	private final List<DestinationStrategy> strategies;
 
-	public StrategyManager(List<Strategy> strategies) {
+	public StrategyManager(List<DestinationStrategy> strategies) {
 		this.strategies = strategies;
 	}
 
@@ -22,7 +22,7 @@ public class StrategyManager {
 		return optionalPoint.orElseGet(() -> getDefaultDestinationPoint(gameBoard));
 	}
 
-	private Strategy chooseStrategy() {
+	private DestinationStrategy chooseStrategy() {
 		return strategies.get(0);
 	}
 
