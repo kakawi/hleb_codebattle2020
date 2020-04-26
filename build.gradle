@@ -4,7 +4,6 @@ version '1.0'
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'application'
-apply plugin: 'idea'
 
 sourceCompatibility = 11
 
@@ -35,10 +34,8 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
 
-    testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.11', ext: 'pom'
+    testCompile 'org.codehaus.groovy:groovy-all:2.5.11'
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
-
-
 }
 
 compileJava.options.encoding = "UTF-8"
