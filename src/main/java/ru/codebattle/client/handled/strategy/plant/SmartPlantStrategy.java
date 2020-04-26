@@ -12,7 +12,7 @@ public class SmartPlantStrategy implements PlantStrategy {
 
 	private static final int DESTROY_WALL_RADIUS = 3;
 	private static final int OTHER_BOMBERMANS_RADIUS = 3;
-	private static final int MEAT_CHOPPERS_RADIUS = 3;
+	private static final int MEAT_CHOPPERS_RADIUS = 2;
 
 	@Override
 	public boolean doPlantBomb(HandledGameBoard gameBoard, TypedBoardPoint position) {
