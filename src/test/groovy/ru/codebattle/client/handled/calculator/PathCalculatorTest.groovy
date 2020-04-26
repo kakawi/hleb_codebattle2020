@@ -174,4 +174,48 @@ class PathCalculatorTest extends Specification {
 		then:
 			nextPoint == bomberman
 	}
+
+	def "not move #3"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼☼
+				☼       ☼
+				☼ ☼☼☼☼  ☼
+				☼ ☼☺ ☼  ☼
+				☼   2   ☼
+				☼#☼ 1☼  ☼
+				☼ ☼☼☼☼  ☼
+				☼       ☼
+				☼☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			TypedBoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
+			TypedBoardPoint bomberman = board.getBomberman()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+		then:
+			nextPoint == bomberman
+	}
+
+	def "situation #1"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼☼
+				☼ ☼     ☼
+				☼    #  ☼
+				☼  ☺    ☼
+				☼ ☼ ☼☼  ☼
+				☼ ☼21   ☼
+				☼ ☼     ☼
+				☼ ☼     ☼
+				☼☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			TypedBoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
+			TypedBoardPoint bomberman = board.getBomberman()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+		then:
+			nextPoint == bomberman.shiftRight().get() || nextPoint == bomberman.shiftLeft().get()
+	}
 }
