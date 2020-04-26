@@ -54,7 +54,7 @@ public enum BoardElement {
     }
 
     public boolean isPassable() {
-        return this == NONE || this == DESTROYED_WALL || this == BOOM || this == DEAD_MEAT_CHOPPER;
+        return this == NONE || this == DESTROYED_WALL || this == BOOM || this == DEAD_MEAT_CHOPPER || this == OTHER_DEAD_BOMBERMAN;
     }
 
     public boolean isProtectFromExplosion() {

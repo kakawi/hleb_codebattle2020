@@ -3,14 +3,21 @@ package ru.codebattle.client.handled.calculator;
 import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
+import ru.codebattle.client.handled.HandledGameBoard;
 import ru.codebattle.client.handled.TypedBoardPoint;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class PathValueCalculator {
 
-	public double calculateValueForStep(TypedBoardPoint nextPoint, int tick) {
+	public double calculateValueForStep(
+			TypedBoardPoint nextPoint, int tick, TypedBoardPoint fromPoint, HandledGameBoard gameBoard
+	) {
 		switch (tick) {
 			case 0:
-				return firstTick(nextPoint);
+				return firstTick(nextPoint, fromPoint, gameBoard);
 			case 1:
 				return secondTick(nextPoint);
 			case 2:
@@ -22,7 +29,9 @@ public class PathValueCalculator {
 		}
 	}
 
-	private double firstTick(TypedBoardPoint nextPoint) {
+	private double firstTick(
+			TypedBoardPoint nextPoint, TypedBoardPoint fromPoint, HandledGameBoard gameBoard
+	) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		ExplosionStatus explosionStatus = explosionInfo.getStatus();
 		int price;
@@ -61,10 +70,8 @@ public class PathValueCalculator {
 				price = 160;
 				break;
 			case AFTER_2_TICKS:
-				price = 200;
-				break;
+				return Double.MAX_VALUE;
 			case NEXT_TICK:
-				return 1000;
 			default:
 				price = 30;
 		}
@@ -81,13 +88,9 @@ public class PathValueCalculator {
 				price = 70;
 				break;
 			case AFTER_3_TICKS:
-				price = 150;
-				break;
+				return Double.MAX_VALUE;
 			case AFTER_2_TICKS:
-				price = 180;
-				break;
 			case NEXT_TICK:
-				return 500;
 			default:
 				price = 30;
 		}
@@ -101,16 +104,10 @@ public class PathValueCalculator {
 		int price;
 		switch (explosionStatus) {
 			case AFTER_4_TICKS:
-				price = 60;
-				break;
+				return Double.MAX_VALUE;
 			case AFTER_3_TICKS:
-				price = 130;
-				break;
 			case AFTER_2_TICKS:
-				price = 150;
-				break;
 			case NEXT_TICK:
-				return 200;
 			default:
 				price = 30;
 		}

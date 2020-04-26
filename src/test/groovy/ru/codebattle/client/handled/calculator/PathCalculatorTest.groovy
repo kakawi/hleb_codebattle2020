@@ -267,4 +267,46 @@ class PathCalculatorTest extends Specification {
 		then:
 			nextPoint != bomberman.shiftBottom().get()
 	}
+
+	def "move LEFT #2"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼
+				☼  ☼   ☼
+				☼  ☼   ☼
+				☼     ☼☼
+				☼♥   ☺☼☼
+				☼     ☼☼
+				☼  ☼   ☼
+				☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			def bomberman = board.getBomberman()
+			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+		then:
+			nextPoint == bomberman.shiftLeft().get()
+	}
+
+	def "trap move"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼
+				☼  ☺ #♥☼
+				☼  2   ☼
+				☼      ☼
+				☼      ☼
+				☼      ☼
+				☼      ☼
+				☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			def bomberman = board.getBomberman()
+			TypedBoardPoint competitor = board.getPoint(6, 1).get()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+		then:
+			nextPoint == bomberman.shiftLeft().get()
+	}
 }

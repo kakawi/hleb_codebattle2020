@@ -27,7 +27,7 @@ public class PathCalculator {
 		alreadyOpenedPoints.add(currentMinPoint);
 		visitedPoints.add(currentMinPoint);
 
-		Optional<PathPoint> optionalLastPoint = getPathToDestination(destinationPoint, currentMinPoint, alreadyOpenedPoints, visitedPoints);
+		Optional<PathPoint> optionalLastPoint = getPathToDestination(destinationPoint, currentMinPoint, alreadyOpenedPoints, visitedPoints, gameBoard);
 
 		// didn't find the way - Don't stand on the same place
 		if (optionalLastPoint.isEmpty()) {
@@ -77,13 +77,13 @@ public class PathCalculator {
 			TypedBoardPoint destinationPoint,
 			PathPoint currentMinPoint,
 			Set<PathPoint> alreadyOpenedPoints,
-			Set<PathPoint> visitedPoints
+			Set<PathPoint> visitedPoints, HandledGameBoard gameBoard
 	) {
 		while (!destinationPoint.canBeDestroyedFrom(currentMinPoint.getPoint())) {
 			visitedPoints.add(currentMinPoint);
-			recalculatePrice(alreadyOpenedPoints, currentMinPoint, visitedPoints);
+			recalculatePrice(alreadyOpenedPoints, currentMinPoint, visitedPoints, gameBoard);
 
-			Set<PathPoint> newOpenedPoints = openNewPoints(currentMinPoint, alreadyOpenedPoints);
+			Set<PathPoint> newOpenedPoints = openNewPoints(currentMinPoint, alreadyOpenedPoints, gameBoard);
 			alreadyOpenedPoints.addAll(newOpenedPoints);
 
 			Optional<PathPoint> optionalPathPoint = getMinPoint(alreadyOpenedPoints, visitedPoints);
@@ -97,7 +97,10 @@ public class PathCalculator {
 	}
 
 	private void recalculatePrice(
-			Set<PathPoint> alreadyOpenedPoints, PathPoint currentMinPoint, Set<PathPoint> visitedPoints
+			Set<PathPoint> alreadyOpenedPoints,
+			PathPoint currentMinPoint,
+			Set<PathPoint> visitedPoints,
+			HandledGameBoard gameBoard
 	) {
 		for (PathPoint openedPoint : alreadyOpenedPoints) {
 			if (visitedPoints.contains(openedPoint)) {
@@ -107,8 +110,8 @@ public class PathCalculator {
 				continue;
 			}
 
-			double priceForStep = pathValueCalculator.calculateValueForStep(openedPoint.getPoint(), openedPoint.getTick());
-			double fullPrice = currentMinPoint.getPrice() + priceForStep;
+			double recalculatedPrice = pathValueCalculator.calculateValueForStep(openedPoint.getPoint(), currentMinPoint.getTick(), currentMinPoint.getPoint(), gameBoard);
+			double fullPrice = currentMinPoint.getPrice() + recalculatedPrice;
 			if (openedPoint.getPrice() > fullPrice) {
 				openedPoint.setPrice(fullPrice);
 				openedPoint.setPreviousPoint(currentMinPoint);
@@ -125,7 +128,7 @@ public class PathCalculator {
 	}
 
 	private Set<PathPoint> openNewPoints(
-			PathPoint centralPathPoint, Set<PathPoint> alreadyOpenedPoints
+			PathPoint centralPathPoint, Set<PathPoint> alreadyOpenedPoints, HandledGameBoard gameBoard
 	) {
 		TypedBoardPoint centerPoint = centralPathPoint.getPoint();
 		return Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint.shiftLeft())
@@ -133,7 +136,7 @@ public class PathCalculator {
 					 .map(Optional::get)
 					 .filter(point -> point.getBoardElement().isPassable())
 					 .map(point -> {
-						 double price = pathValueCalculator.calculateValueForStep(point, centralPathPoint.getTick());
+						 double price = pathValueCalculator.calculateValueForStep(point, centralPathPoint.getTick(), centerPoint, gameBoard);
 						 return new PathPoint(centralPathPoint.getPrice() + price, point, centralPathPoint);
 					 })
 					 .filter(pathPoint -> !alreadyOpenedPoints.contains(pathPoint))
