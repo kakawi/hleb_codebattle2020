@@ -23,11 +23,8 @@ public class CodeBattleClient extends CodeBattleBase {
 
     @Override
     protected String doMove(HandledGameBoard gameBoard) {
-        clearScreen();
         TurnAction action = callback.apply(gameBoard);
-        var command = action.toString();
-        System.out.println(command);
-        return command;
+        return action.toString();
     }
 
     public void clearScreen() {

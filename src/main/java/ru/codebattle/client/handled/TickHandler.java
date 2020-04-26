@@ -44,7 +44,7 @@ public class TickHandler {
 		}
 
 		TypedBoardPoint destinationPoint = strategyManager.getDestinationPoint(gameBoard);
-		log.info("Destination point " + destinationPoint);
+//		log.info("Destination point " + destinationPoint);
 //		log.info(
 //				gameBoard.toString());
 
