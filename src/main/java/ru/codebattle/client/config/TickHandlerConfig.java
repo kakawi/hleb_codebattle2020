@@ -8,9 +8,15 @@ import ru.codebattle.client.handled.calculator.PathValueCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
+import ru.codebattle.client.history.History;
 
 @Configuration
 public class TickHandlerConfig {
+
+	@Bean
+	public History history() {
+		return new History();
+	}
 
 	@Bean
 	public PathCalculator pathCalculator(PathValueCalculator pathValueCalculator) {
@@ -27,8 +33,9 @@ public class TickHandlerConfig {
 			DestinationStrategyManager destinationStrategyManager,
 			PathCalculator pathCalculator,
 			PlantStrategiesManager plantStrategiesManager,
-			BombsController bombsController
+			BombsController bombsController,
+			History history
 	) {
-		return new TickHandler(destinationStrategyManager, pathCalculator, plantStrategiesManager, bombsController);
+		return new TickHandler(destinationStrategyManager, pathCalculator, plantStrategiesManager, bombsController, history);
 	}
 }

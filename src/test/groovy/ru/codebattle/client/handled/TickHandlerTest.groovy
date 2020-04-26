@@ -13,6 +13,7 @@ import ru.codebattle.client.handled.strategy.plant.BombsController
 import ru.codebattle.client.handled.strategy.plant.DiagonalPlantStrategy
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager
 import ru.codebattle.client.handled.strategy.plant.SimplePlantStrategy
+import ru.codebattle.client.history.History
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,6 +23,7 @@ class TickHandlerTest extends Specification {
 	private PathCalculator pathCalculator = new PathCalculator(new PathValueCalculator())
 	private PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager([new SimplePlantStrategy()])
 	private BombsController bombsController = Mock()
+	private History history = Mock()
 
 	@Unroll
 	def "escape explosion #bomb"() {
@@ -35,7 +37,7 @@ class TickHandlerTest extends Specification {
 			"""
 		given:
 			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController)
+			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
 		then:
@@ -61,7 +63,7 @@ class TickHandlerTest extends Specification {
 			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
 			TypedBoardPoint bombermanPoint = board.getBomberman()
 			ExplosionInfo explosionInfo = bombermanPoint.getExplosionInfo()
-			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController)
+			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
 			explosionInfo.getStatus() == ExplosionStatus.NEXT_TICK
@@ -89,7 +91,7 @@ class TickHandlerTest extends Specification {
 			PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager(Arrays.asList(
 					new DiagonalPlantStrategy()
 			));
-			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController)
+			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
 		then:

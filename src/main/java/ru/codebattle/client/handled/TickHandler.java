@@ -8,6 +8,7 @@ import ru.codebattle.client.handled.calculator.PathCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
+import ru.codebattle.client.history.History;
 
 @Slf4j
 public class TickHandler {
@@ -17,17 +18,20 @@ public class TickHandler {
 	private final PathCalculator pathCalculator;
 	private final PlantStrategiesManager plantStrategiesManager;
 	private final BombsController bombsController;
+	private final History history;
 
 	public TickHandler(
 			DestinationStrategyManager destinationStrategyManager,
 			PathCalculator pathCalculator,
 			PlantStrategiesManager plantStrategiesManager,
-			BombsController bombsController
+			BombsController bombsController,
+			History history
 	) {
 		this.destinationStrategyManager = destinationStrategyManager;
 		this.pathCalculator = pathCalculator;
 		this.plantStrategiesManager = plantStrategiesManager;
 		this.bombsController = bombsController;
+		this.history = history;
 	}
 
 	public TurnAction handle(HandledGameBoard gameBoard) {
@@ -38,6 +42,7 @@ public class TickHandler {
 		TypedBoardPoint bombermanPoint = gameBoard.getBomberman();
 
 		if (gameBoard.amIDead()) { // TODO
+			history.printHistory();
 			return new TurnAction(false, Direction.STOP);
 		}
 
@@ -47,13 +52,19 @@ public class TickHandler {
 		Direction direction = findBestDirection(bombermanPoint, nextPoint);
 
 		boolean act = plantStrategiesManager.doPlantBomb(gameBoard, bombermanPoint, nextPoint);
+
+		TurnAction action = new TurnAction(act, direction);
+
+		history.add(gameBoard, destinationPoint, bombermanPoint, nextPoint, bombsController.getMyBombs(), action, act);
+
 		if (act) {
 			bombsController.plantBomb(bombermanPoint);
 		}
 
 		stopWatch.stop();
 		log.info("Handle time (microseconds): " + (stopWatch.getNanoTime() / 1_000_000.0));
-		return new TurnAction(act, direction);
+
+		return action;
 	}
 
 	private Direction findBestDirection(TypedBoardPoint bombermanPoint, TypedBoardPoint bestNextPoint) {

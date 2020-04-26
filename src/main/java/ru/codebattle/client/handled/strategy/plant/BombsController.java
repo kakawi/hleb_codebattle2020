@@ -5,6 +5,8 @@ import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.HandledGameBoard;
 import ru.codebattle.client.handled.TypedBoardPoint;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,6 +57,9 @@ public class BombsController {
 			case TICK_2:
 				next.setValue(StatusOfMyBomb.TICK_1);
 				break;
+			case TICK_1:
+				next.setValue(StatusOfMyBomb.EXPLODED);
+				break;
 		}
 	}
 
@@ -86,7 +91,11 @@ public class BombsController {
 		}
 	}
 
-	private enum StatusOfMyBomb {
+	public Map<TypedBoardPoint, StatusOfMyBomb> getMyBombs() {
+		return new HashMap<>(myBombs);
+	}
+
+	public enum StatusOfMyBomb {
 		EXPLODED, TICK_1, TICK_2, TICK_3, TICK_4, TICK_5
 	}
 }
