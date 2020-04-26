@@ -52,7 +52,7 @@ public class TickHandler {
 		Direction direction = findBestDirection(bombermanPoint, nextPoint);
 
 //		boolean act = false;
-		boolean act = plantStrategiesManager.isPlantBomb(bombermanPoint);
+		boolean act = plantStrategiesManager.doPlantBomb(gameBoard, bombermanPoint);
 //		if (act) {
 //			myBombs.add(bombermanPoint);
 //		}

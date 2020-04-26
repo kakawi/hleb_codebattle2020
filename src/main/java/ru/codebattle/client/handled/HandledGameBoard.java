@@ -2,9 +2,11 @@ package ru.codebattle.client.handled;
 
 import ru.codebattle.client.api.BoardElement;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class HandledGameBoard {
 
@@ -105,5 +107,20 @@ public class HandledGameBoard {
 		for (int i = 0; i < size(); i++) {
 			stringBuilder.append(boardString, i * size(), size() * (i + 1)).append(System.lineSeparator());
 		} return stringBuilder.toString();
+	}
+
+	public Collection<TypedBoardPoint> getElementsInRectangle(
+			int x1, int y1, int x2, int y2, BoardElement... elementType
+	) {
+		Collection<TypedBoardPoint> result = new ArrayList<>();
+		Set<BoardElement> elementTypes = Set.of(elementType);
+		for (int i = Math.max(0, x1); i <= Math.min(size - 1, x2); i++) {
+			for (int j = Math.max(0, y1); j <= Math.min(size - 1, y2); j++) {
+				if (elementTypes.contains(typedBoardPoints[i][j].getBoardElement())) {
+					result.add(typedBoardPoints[i][j]);
+				}
+			}
+		}
+		return result;
 	}
 }
