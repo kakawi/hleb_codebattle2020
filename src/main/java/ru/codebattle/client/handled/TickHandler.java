@@ -5,7 +5,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import ru.codebattle.client.api.Direction;
 import ru.codebattle.client.api.TurnAction;
 import ru.codebattle.client.handled.calculator.PathCalculator;
-import ru.codebattle.client.handled.strategy.move.StrategyManager;
+import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 
 import java.util.ArrayList;
@@ -19,16 +19,16 @@ public class TickHandler {
 
 	private StopWatch stopWatch = new StopWatch();
 	private Random random = new Random(System.currentTimeMillis());
-	private final StrategyManager strategyManager;
+	private final DestinationStrategyManager destinationStrategyManager;
 	private final PathCalculator pathCalculator;
 	private final PlantStrategiesManager plantStrategiesManager;
 
 	public TickHandler(
-			StrategyManager strategyManager,
+			DestinationStrategyManager destinationStrategyManager,
 			PathCalculator pathCalculator,
 			PlantStrategiesManager plantStrategiesManager
 	) {
-		this.strategyManager = strategyManager;
+		this.destinationStrategyManager = destinationStrategyManager;
 		this.pathCalculator = pathCalculator;
 		this.plantStrategiesManager = plantStrategiesManager;
 	}
@@ -43,7 +43,7 @@ public class TickHandler {
 			return new TurnAction(false, Direction.STOP);
 		}
 
-		TypedBoardPoint destinationPoint = strategyManager.getDestinationPoint(gameBoard);
+		TypedBoardPoint destinationPoint = destinationStrategyManager.getDestinationPoint(gameBoard);
 //		log.info("Destination point " + destinationPoint);
 //		log.info(
 //				gameBoard.toString());

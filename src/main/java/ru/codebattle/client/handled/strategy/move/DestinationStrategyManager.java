@@ -6,11 +6,11 @@ import ru.codebattle.client.handled.TypedBoardPoint;
 import java.util.List;
 import java.util.Optional;
 
-public class StrategyManager {
+public class DestinationStrategyManager {
 
 	private final List<DestinationStrategy> strategies;
 
-	public StrategyManager(List<DestinationStrategy> strategies) {
+	public DestinationStrategyManager(List<DestinationStrategy> strategies) {
 		this.strategies = strategies;
 	}
 

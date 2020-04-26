@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.codebattle.client.handled.TickHandler;
 import ru.codebattle.client.handled.calculator.PathCalculator;
 import ru.codebattle.client.handled.calculator.PathValueCalculator;
-import ru.codebattle.client.handled.strategy.move.StrategyManager;
+import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 
 import java.io.IOException;
@@ -23,11 +23,11 @@ public class Main {
     public static void main(String[] args) throws URISyntaxException, IOException {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         PlantStrategiesManager plantStrategiesManager = context.getBean(PlantStrategiesManager.class);
-        StrategyManager strategyManager = context.getBean(StrategyManager.class);
+        DestinationStrategyManager destinationStrategyManager = context.getBean(DestinationStrategyManager.class);
 
         PathValueCalculator pathValueCalculator = new PathValueCalculator();
         PathCalculator pathCalculator = new PathCalculator(pathValueCalculator);
-        TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager);
+        TickHandler tickHandler = new TickHandler(destinationStrategyManager, pathCalculator, plantStrategiesManager);
 
         CodeBattleClient client = new CodeBattleClient(SERVER_ADDRESS);
         client.run(tickHandler::handle);

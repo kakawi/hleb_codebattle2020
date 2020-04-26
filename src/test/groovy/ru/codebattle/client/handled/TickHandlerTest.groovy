@@ -6,20 +6,18 @@ import ru.codebattle.client.api.Direction
 import ru.codebattle.client.api.TurnAction
 import ru.codebattle.client.handled.calculator.PathCalculator
 import ru.codebattle.client.handled.calculator.PathValueCalculator
-import ru.codebattle.client.handled.strategy.move.FarthestWallStrategy
 import ru.codebattle.client.handled.strategy.move.NearestBombermanStrategy
 import ru.codebattle.client.handled.strategy.move.NearestWallStrategy
-import ru.codebattle.client.handled.strategy.move.StrategyManager
+import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager
 import ru.codebattle.client.handled.strategy.plant.DiagonalPlantStrategy
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager
 import ru.codebattle.client.handled.strategy.plant.SimplePlantStrategy
-import ru.codebattle.client.handled.strategy.plant.Tick2DelayPlantStrategy
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class TickHandlerTest extends Specification {
 
-	private StrategyManager strategyManager = new StrategyManager([new NearestWallStrategy()])
+	private DestinationStrategyManager strategyManager = new DestinationStrategyManager([new NearestWallStrategy()])
 	private PathCalculator pathCalculator = new PathCalculator(new PathValueCalculator())
 	private PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager([new SimplePlantStrategy()])
 
@@ -83,7 +81,7 @@ class TickHandlerTest extends Specification {
 			"""
 		given:
 			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			StrategyManager strategyManager = new StrategyManager(Arrays.asList(
+			DestinationStrategyManager strategyManager = new DestinationStrategyManager(Arrays.asList(
 					new NearestBombermanStrategy()
 			));
 			PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager(Arrays.asList(

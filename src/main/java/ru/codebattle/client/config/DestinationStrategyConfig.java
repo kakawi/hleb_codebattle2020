@@ -7,16 +7,16 @@ import ru.codebattle.client.handled.strategy.move.NearestBombermanStrategy;
 import ru.codebattle.client.handled.strategy.move.NearestMeatChopperStrategy;
 import ru.codebattle.client.handled.strategy.move.NearestWallStrategy;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategy;
-import ru.codebattle.client.handled.strategy.move.StrategyManager;
+import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 
 import java.util.Collections;
 
 @Configuration
-public class MoveStrategyConfig {
+public class DestinationStrategyConfig {
 
 	@Bean
-	public StrategyManager strategyManager(DestinationStrategy destinationStrategy) {
-		return new StrategyManager(Collections.singletonList(destinationStrategy));
+	public DestinationStrategyManager strategyManager(DestinationStrategy destinationStrategy) {
+		return new DestinationStrategyManager(Collections.singletonList(destinationStrategy));
 	}
 
 	@Bean
