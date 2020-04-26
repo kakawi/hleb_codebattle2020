@@ -43,7 +43,6 @@ public class SmartPlantStrategy implements PlantStrategy {
 		TypedBoardPoint theFirstBombToExplode = positionExplosionInfo.getPointWithBomb();
 
 		boolean ourBomb = bombsController.isOurBomb(theFirstBombToExplode);
-		log.warn("OurBomb {}", ourBomb);
 		SituationAround situationAround = SituationAround.builder()
 														 .canIDestroyAWall(canIDestroyAWall)
 														 .explosionStatusOfPosition(positionExplosionInfo.getStatus())
