@@ -75,14 +75,15 @@ class HandledGameBoardTest extends Specification {
 			int y2 = bomberman.getY() + radius
 		when:
 			Collection<TypedBoardPoint> elements = board.getElementsInRectangle(x1, y1, x2, y2, elementType as BoardElement[])
+			Collection<TypedBoardPoint> elementsFromCenter = board.getElementsInRectangle(bomberman.getX(), bomberman.getY(), radius, elementType as BoardElement[])
 		then:
 			elements.size() == countOfElements
+			elements == elementsFromCenter
 		where:
 			elementType                                                       | radius | countOfElements
 			BoardElement.DESTROY_WALL                                         | 1      | 0
 			BoardElement.DESTROY_WALL                                         | 2      | 3
 			[BoardElement.OTHER_BOMB_BOMBERMAN, BoardElement.OTHER_BOMBERMAN] | 1      | 2
 			BoardElement.BOMBERMAN                                            | 100    | 1
-
 	}
 }

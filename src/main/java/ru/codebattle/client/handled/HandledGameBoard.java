@@ -123,4 +123,23 @@ public class HandledGameBoard {
 		}
 		return result;
 	}
+
+	public Collection<TypedBoardPoint> getElementsInRectangle(
+			int x, int y, int radius, BoardElement... elementType
+	) {
+		Collection<TypedBoardPoint> result = new ArrayList<>();
+		Set<BoardElement> elementTypes = Set.of(elementType);
+		int x1 = Math.max(0, x - radius);
+		int x2 = Math.min(size - 1, x + radius);
+		int y1 = Math.max(0, y - radius);
+		int y2 = Math.min(size - 1, y + radius);
+		for (int i = x1; i <= x2; i++) {
+			for (int j = y1; j <= y2; j++) {
+				if (elementTypes.contains(typedBoardPoints[i][j].getBoardElement())) {
+					result.add(typedBoardPoints[i][j]);
+				}
+			}
+		}
+		return result;
+	}
 }

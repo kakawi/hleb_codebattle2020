@@ -7,6 +7,7 @@ import ru.codebattle.client.handled.strategy.plant.DiagonalPlantStrategy;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategy;
 import ru.codebattle.client.handled.strategy.plant.SimplePlantStrategy;
+import ru.codebattle.client.handled.strategy.plant.SmartPlantStrategy;
 import ru.codebattle.client.handled.strategy.plant.Tick2DelayPlantStrategy;
 
 import java.util.Collections;
@@ -21,6 +22,12 @@ public class PlantStrategyConfig {
 
 	@Bean
 	@Primary
+	public PlantStrategy smartPlantStrategy() {
+		return new SmartPlantStrategy();
+	}
+
+	@Bean
+//	@Primary
 	public PlantStrategy diagonalPlantStrategy() {
 		return new DiagonalPlantStrategy();
 	}
