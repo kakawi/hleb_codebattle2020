@@ -22,12 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
-        PlantStrategiesManager plantStrategiesManager = context.getBean(PlantStrategiesManager.class);
-        DestinationStrategyManager destinationStrategyManager = context.getBean(DestinationStrategyManager.class);
-
-        PathValueCalculator pathValueCalculator = new PathValueCalculator();
-        PathCalculator pathCalculator = new PathCalculator(pathValueCalculator);
-        TickHandler tickHandler = new TickHandler(destinationStrategyManager, pathCalculator, plantStrategiesManager);
+        TickHandler tickHandler = context.getBean(TickHandler.class);
 
         CodeBattleClient client = new CodeBattleClient(SERVER_ADDRESS);
         client.run(tickHandler::handle);

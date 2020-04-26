@@ -3,6 +3,7 @@ package ru.codebattle.client.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.DiagonalPlantStrategy;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategy;
@@ -22,8 +23,8 @@ public class PlantStrategyConfig {
 
 	@Bean
 	@Primary
-	public PlantStrategy smartPlantStrategy() {
-		return new SmartPlantStrategy();
+	public PlantStrategy smartPlantStrategy(BombsController bombsController) {
+		return new SmartPlantStrategy(bombsController);
 	}
 
 	@Bean
@@ -40,5 +41,10 @@ public class PlantStrategyConfig {
 	@Bean
 	public PlantStrategy tick2DelayPlantStrategy() {
 		return new Tick2DelayPlantStrategy();
+	}
+
+	@Bean
+	public BombsController bombsController() {
+		return new BombsController();
 	}
 }

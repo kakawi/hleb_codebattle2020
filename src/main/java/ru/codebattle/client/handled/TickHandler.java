@@ -6,11 +6,11 @@ import ru.codebattle.client.api.Direction;
 import ru.codebattle.client.api.TurnAction;
 import ru.codebattle.client.handled.calculator.PathCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
+import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 @Slf4j
 public class TickHandler {
@@ -18,24 +18,27 @@ public class TickHandler {
 	private final Collection<TypedBoardPoint> myBombs = new ArrayList<>(); // TODO
 
 	private StopWatch stopWatch = new StopWatch();
-	private Random random = new Random(System.currentTimeMillis());
 	private final DestinationStrategyManager destinationStrategyManager;
 	private final PathCalculator pathCalculator;
 	private final PlantStrategiesManager plantStrategiesManager;
+	private final BombsController bombsController;
 
 	public TickHandler(
 			DestinationStrategyManager destinationStrategyManager,
 			PathCalculator pathCalculator,
-			PlantStrategiesManager plantStrategiesManager
+			PlantStrategiesManager plantStrategiesManager,
+			BombsController bombsController
 	) {
 		this.destinationStrategyManager = destinationStrategyManager;
 		this.pathCalculator = pathCalculator;
 		this.plantStrategiesManager = plantStrategiesManager;
+		this.bombsController = bombsController;
 	}
 
 	public TurnAction handle(HandledGameBoard gameBoard) {
 		stopWatch.reset();
 		stopWatch.start();
+		bombsController.tick(gameBoard);
 
 		TypedBoardPoint bombermanPoint = gameBoard.getBomberman();
 
@@ -51,11 +54,10 @@ public class TickHandler {
 		TypedBoardPoint nextPoint = pathCalculator.getNextPoint(gameBoard, destinationPoint);
 		Direction direction = findBestDirection(bombermanPoint, nextPoint);
 
-//		boolean act = false;
 		boolean act = plantStrategiesManager.doPlantBomb(gameBoard, bombermanPoint);
-//		if (act) {
-//			myBombs.add(bombermanPoint);
-//		}
+		if (act) {
+			bombsController.plantBomb(bombermanPoint);
+		}
 
 		stopWatch.stop();
 		log.info("Handle time (microseconds): " + (stopWatch.getNanoTime() / 1_000_000.0));
