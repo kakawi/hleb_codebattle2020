@@ -1,5 +1,6 @@
 package ru.codebattle.client.handled.calculator;
 
+import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
 import ru.codebattle.client.handled.TypedBoardPoint;
@@ -39,6 +40,10 @@ public class PathValueCalculator {
 				return Double.MAX_VALUE;
 			default:
 				price = 30;
+		}
+
+		if (nextPoint.isNearMeatChopper()) {
+			price += 1000;
 		}
 
 		return price;

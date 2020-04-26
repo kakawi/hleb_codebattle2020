@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -203,6 +204,14 @@ public class TypedBoardPoint {
 			}
 		}
 		return false;
+	}
+
+	public boolean isNearMeatChopper() {
+		return Stream.of(this.shiftTop(), this.shiftRight(), this.shiftBottom(), this.shiftLeft())
+					 .filter(Optional::isPresent)
+					 .map(Optional::get)
+					 .map(TypedBoardPoint::getBoardElement)
+					 .anyMatch(b -> b == BoardElement.MEAT_CHOPPER);
 	}
 
 	private enum ResearchDirection {
