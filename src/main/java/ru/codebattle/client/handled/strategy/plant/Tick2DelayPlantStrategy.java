@@ -8,8 +8,10 @@ import ru.codebattle.client.handled.TypedBoardPoint;
 public class Tick2DelayPlantStrategy implements PlantStrategy {
 
 	@Override
-	public boolean doPlantBomb(HandledGameBoard gameBoard, TypedBoardPoint position) {
-		ExplosionInfo positionExplosionInfo = position.getExplosionInfo();
+	public boolean doPlantBomb(
+			HandledGameBoard gameBoard, TypedBoardPoint currentPosition, TypedBoardPoint nextPosition
+	) {
+		ExplosionInfo positionExplosionInfo = currentPosition.getExplosionInfo();
 		if (positionExplosionInfo.getStatus() == ExplosionStatus.AFTER_2_TICKS
 		|| positionExplosionInfo.getStatus() == ExplosionStatus.NEXT_TICK) {
 			return false;

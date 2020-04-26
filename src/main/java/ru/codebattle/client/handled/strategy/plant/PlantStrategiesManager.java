@@ -12,7 +12,9 @@ public class PlantStrategiesManager implements PlantStrategy {
 	public PlantStrategiesManager(Collection<PlantStrategy> plantStrategies) {this.plantStrategies = plantStrategies;}
 
 	@Override
-	public boolean doPlantBomb(HandledGameBoard gameBoard, TypedBoardPoint currentPosition) {
-		return plantStrategies.iterator().next().doPlantBomb(gameBoard, currentPosition);
+	public boolean doPlantBomb(
+			HandledGameBoard gameBoard, TypedBoardPoint currentPosition, TypedBoardPoint nextPosition
+	) {
+		return plantStrategies.iterator().next().doPlantBomb(gameBoard, currentPosition, nextPosition);
 	}
 }

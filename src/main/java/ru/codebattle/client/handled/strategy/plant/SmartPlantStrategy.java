@@ -21,13 +21,17 @@ public class SmartPlantStrategy implements PlantStrategy {
 	public SmartPlantStrategy(BombsController bombsController) {this.bombsController = bombsController;}
 
 	@Override
-	public boolean doPlantBomb(HandledGameBoard gameBoard, TypedBoardPoint position) {
-		int x = position.getX();
-		int y = position.getY();
+	public boolean doPlantBomb(
+			HandledGameBoard gameBoard,
+			TypedBoardPoint currentPosition,
+			TypedBoardPoint nextPosition
+	) {
+		int x = currentPosition.getX();
+		int y = currentPosition.getY();
 		boolean canIDestroyAWall = gameBoard.getElementsInRectangle(x, y, DESTROY_WALL_RADIUS, BoardElement.DESTROY_WALL)
 											.stream()
 											.filter(p -> !p.isWillBeDestoyed())
-											.anyMatch(p -> p.canBeDestroyedFrom(position));
+											.anyMatch(p -> p.canBeDestroyedFrom(currentPosition));
 		boolean isBombermanNear = !gameBoard.getElementsInRectangle(x, y, OTHER_BOMBERMANS_RADIUS, BoardElement.OTHER_BOMBERMAN, BoardElement.OTHER_BOMB_BOMBERMAN)
 											.isEmpty();
 		boolean isMeatChopperNear = !gameBoard.getElementsInRectangle(x, y, MEAT_CHOPPERS_RADIUS, BoardElement.MEAT_CHOPPER)
@@ -35,7 +39,7 @@ public class SmartPlantStrategy implements PlantStrategy {
 		boolean isMeatChopperInFrontOfMe = !gameBoard.getElementsInRectangle(x, y, 1, BoardElement.MEAT_CHOPPER)
 													 .isEmpty();
 
-		ExplosionInfo positionExplosionInfo = position.getExplosionInfo();
+		ExplosionInfo positionExplosionInfo = currentPosition.getExplosionInfo();
 		TypedBoardPoint theFirstBombToExplode = positionExplosionInfo.getPointWithBomb();
 
 		boolean ourBomb = bombsController.isOurBomb(theFirstBombToExplode);
@@ -46,8 +50,8 @@ public class SmartPlantStrategy implements PlantStrategy {
 														 .isBombermanNear(isBombermanNear)
 														 .isMeatChopperNear(isMeatChopperNear)
 														 .isMeatChopperInFrontMe(isMeatChopperInFrontOfMe)
-														 .isWeStayOnTheSamePlace(doWeStayOnTheSamePlace(gameBoard, position))
-														 .isOurBombNear(ourBomb)
+														 .isWeStayOnTheSamePlace(currentPosition.equals(nextPosition))
+														 .isOurBombWillExploded(ourBomb)
 														 .build();
 		return makeDecision(situationAround);
 	}
@@ -55,15 +59,15 @@ public class SmartPlantStrategy implements PlantStrategy {
 	private boolean makeDecision(SituationAround situationAround) {
 		// dangerous place
 		if (situationAround.getExplosionStatusOfPosition() != ExplosionStatus.NEVER) {
-			if (situationAround.getExplosionStatusOfPosition() == ExplosionStatus.NEXT_TICK) {
-				if (situationAround.isOurBombNear()) {
+			if (isSuicide(situationAround)) {
+				if (situationAround.isOurBombWillExploded()) {
 					return true; // let's try to loose less points
 				}
 				return false; // don't give additional points to a competitor
 			}
 			if (situationAround.getExplosionStatusOfPosition().ordinal() > ExplosionStatus.AFTER_3_TICKS.ordinal()) {
 				// put the bomb if we will earn points
-				if (situationAround.isOurBombNear()) {
+				if (situationAround.isOurBombWillExploded()) {
 					return true;
 				}
 			}
@@ -79,8 +83,8 @@ public class SmartPlantStrategy implements PlantStrategy {
 		return false;
 	}
 
-	private boolean doWeStayOnTheSamePlace(HandledGameBoard gameBoard, TypedBoardPoint point) {
-		return gameBoard.getBomberman().equals(point);
+	private boolean isSuicide(SituationAround situationAround) {
+		return situationAround.getExplosionStatusOfPosition() == ExplosionStatus.NEXT_TICK && situationAround.isWeStayOnTheSamePlace();
 	}
 
 	@Builder
@@ -92,6 +96,6 @@ public class SmartPlantStrategy implements PlantStrategy {
 		private final boolean isMeatChopperNear;
 		private final boolean isMeatChopperInFrontMe;
 		private final boolean isWeStayOnTheSamePlace;
-		private final boolean isOurBombNear;
+		private final boolean isOurBombWillExploded;
 	}
 }

@@ -54,7 +54,7 @@ public class TickHandler {
 		TypedBoardPoint nextPoint = pathCalculator.getNextPoint(gameBoard, destinationPoint);
 		Direction direction = findBestDirection(bombermanPoint, nextPoint);
 
-		boolean act = plantStrategiesManager.doPlantBomb(gameBoard, bombermanPoint);
+		boolean act = plantStrategiesManager.doPlantBomb(gameBoard, bombermanPoint, nextPoint);
 		if (act) {
 			bombsController.plantBomb(bombermanPoint);
 		}
