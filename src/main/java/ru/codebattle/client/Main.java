@@ -5,10 +5,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import ru.codebattle.client.handled.TickHandler;
-import ru.codebattle.client.handled.calculator.PathCalculator;
-import ru.codebattle.client.handled.calculator.PathValueCalculator;
-import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
-import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -9,15 +9,10 @@ import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 @Slf4j
 public class TickHandler {
 
-	private final Collection<TypedBoardPoint> myBombs = new ArrayList<>(); // TODO
-
-	private StopWatch stopWatch = new StopWatch();
+	private final StopWatch stopWatch = new StopWatch();
 	private final DestinationStrategyManager destinationStrategyManager;
 	private final PathCalculator pathCalculator;
 	private final PlantStrategiesManager plantStrategiesManager;
@@ -47,9 +42,6 @@ public class TickHandler {
 		}
 
 		TypedBoardPoint destinationPoint = destinationStrategyManager.getDestinationPoint(gameBoard);
-//		log.info("Destination point " + destinationPoint);
-//		log.info(
-//				gameBoard.toString());
 
 		TypedBoardPoint nextPoint = pathCalculator.getNextPoint(gameBoard, destinationPoint);
 		Direction direction = findBestDirection(bombermanPoint, nextPoint);

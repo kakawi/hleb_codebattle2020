@@ -62,7 +62,7 @@ public class BombsController {
 		TypedBoardPoint savedPoint = next.getKey();
 		Optional<TypedBoardPoint> optionalCurrentPoint = gameBoard.getPoint(savedPoint.getX(), savedPoint.getY());
 		if (optionalCurrentPoint.isEmpty()) {
-			log.warn("The bomb is disappeared");
+			log.error("The bomb is disappeared");
 			return false;
 		}
 		TypedBoardPoint currentPoint = optionalCurrentPoint.get();
@@ -81,7 +81,7 @@ public class BombsController {
 			case TICK_4:
 				return currentElement == BoardElement.BOMB_TIMER_4;
 			default:
-				log.warn("Something goes wrong");
+				log.error("Is wanted {} - is gotten {}", savedPoint, currentElement);
 				return false;
 		}
 	}
