@@ -242,4 +242,29 @@ class PathCalculatorTest extends Specification {
 		then:
 			nextPoint != bomberman.shiftLeft().get()
 	}
+
+	def "situation #3 - near MeatChopper, wall and bomb"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼☼☼☼☼
+				☼          ☼
+				☼  ☼☼☼☼☼☼☼ ☼
+				☼  ☼       ☼
+				☼  ☼       ☼
+				☼  ☼       ☼
+				☼ ☺☼       ☼
+				☼# ☼       ☼
+				☼& ☼       ☼
+				☼ 1☼       ☼
+				☼          ☼
+				☼☼☼☼☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			TypedBoardPoint destinationPoint = board.getMeatChoppers().iterator().next()
+			TypedBoardPoint bomberman = board.getBomberman()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+		then:
+			nextPoint != bomberman.shiftBottom().get()
+	}
 }
