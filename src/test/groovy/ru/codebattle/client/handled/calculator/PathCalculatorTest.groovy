@@ -309,4 +309,25 @@ class PathCalculatorTest extends Specification {
 		then:
 			nextPoint == bomberman.shiftLeft().get()
 	}
+
+	def "NOT step in BOOM"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼
+				☼♥  ҉☺ ☼
+				☼҉҉҉҉҉ ☼
+				☼ ҉    ☼
+				☼      ☼
+				☼      ☼
+				☼      ☼
+				☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			def bomberman = board.getBomberman()
+			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+		then:
+			nextPoint != bomberman.shiftLeft().get() && nextPoint != bomberman.shiftBottom().get()
+	}
 }

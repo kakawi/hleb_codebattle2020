@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -135,11 +136,17 @@ public class PathCalculator {
 					 .filter(Optional::isPresent)
 					 .map(Optional::get)
 					 .filter(point -> point.getBoardElement().isPassable())
+					 .filter(firstTickFilter(centralPathPoint))
 					 .map(point -> {
 						 double price = pathValueCalculator.calculateValueForStep(point, centralPathPoint.getTick(), centerPoint, gameBoard);
 						 return new PathPoint(centralPathPoint.getPrice() + price, point, centralPathPoint);
 					 })
 					 .filter(pathPoint -> !alreadyOpenedPoints.contains(pathPoint))
 					 .collect(Collectors.toSet());
+	}
+
+	private Predicate<TypedBoardPoint> firstTickFilter(PathPoint centralPathPoint) {
+		return point -> centralPathPoint.getTick() == 0 && point.getBoardElement().isNextTickPassable()
+				|| centralPathPoint.getTick() != 0 && point.getBoardElement().isPassable();
 	}
 }

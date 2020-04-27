@@ -3,9 +3,6 @@ package ru.codebattle.client.api;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 @RequiredArgsConstructor
 @Getter
 public enum BoardElement {
@@ -53,8 +50,12 @@ public enum BoardElement {
         return String.valueOf(symbol);
     }
 
+    public boolean isNextTickPassable() {
+        return this == NONE || this == DESTROYED_WALL;
+    }
+
     public boolean isPassable() {
-        return this == NONE || this == DESTROYED_WALL || this == BOOM || this == DEAD_MEAT_CHOPPER || this == OTHER_DEAD_BOMBERMAN;
+        return isNextTickPassable() || this == BOOM || this == DEAD_MEAT_CHOPPER || this == OTHER_DEAD_BOMBERMAN;
     }
 
     public boolean isProtectFromExplosion() {
