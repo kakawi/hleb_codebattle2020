@@ -76,4 +76,46 @@ class SmartPlantStrategyTest extends Specification {
 		expect:
 			smartPlantStrategy.doPlantBomb(board, bomberman, bomberman)
 	}
+
+	def "suicide #3"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼☼
+				☼       ☼
+				☼       ☼
+				☼       ☼
+				☼       ☼
+				☼ ☼☼☼   ☼
+				☼   ☺21 ☼
+				☼ & 4   ☼
+				☼☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			TypedBoardPoint bomberman = board.getBomberman()
+		and:
+			bombsController.isOurBomb(_) >> true
+		expect:
+			smartPlantStrategy.doPlantBomb(board, bomberman, bomberman.shiftLeft().get())
+	}
+
+	def "wall near"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼☼
+				☼       ☼
+				☼       ☼
+				☼       ☼
+				☼       ☼
+				☼ ☼☼☼   ☼
+				☼   ☺#  ☼
+				☼       ☼
+				☼☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			TypedBoardPoint bomberman = board.getBomberman()
+		and:
+			bombsController.isOurBomb(_) >> true
+		expect:
+			smartPlantStrategy.doPlantBomb(board, bomberman, bomberman.shiftLeft().get())
+	}
 }
