@@ -1,5 +1,6 @@
 package ru.codebattle.client.handled.calculator;
 
+import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
 import ru.codebattle.client.handled.HandledGameBoard;
@@ -7,6 +8,7 @@ import ru.codebattle.client.handled.TypedBoardPoint;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -63,15 +65,34 @@ public class PathCalculator {
 	}
 
 	private TypedBoardPoint theBestMove(TypedBoardPoint centerPoint) {
-		return Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint.shiftLeft(), Optional.of(centerPoint))
-					 .filter(Optional::isPresent)
-					 .map(Optional::get)
-					 .filter(point -> point.getBoardElement().isPassable() || point.equals(centerPoint))
-					 .sorted((p1, p2) -> p2.getExplosionInfo().getStatus().ordinal() - p1.getExplosionInfo()
-																						 .getStatus()
-																						 .ordinal())
-					 .findFirst()
-					 .orElse(centerPoint);
+		List<TypedBoardPoint> variants = Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint
+				.shiftLeft(), Optional.of(centerPoint))
+											  .filter(Optional::isPresent)
+											  .map(Optional::get)
+											  .filter(point -> point.getBoardElement()
+																	.isPassable() || point.equals(centerPoint))
+											  .sorted((p1, p2) -> p2.getExplosionInfo()
+																	.getStatus()
+																	.ordinal() - p1.getExplosionInfo()
+																				   .getStatus()
+																				   .ordinal())
+											  .limit(2)
+											  .collect(Collectors.toList());
+		if (variants.isEmpty()) {
+			return centerPoint;
+		}
+		if (variants.size() == 1) {
+			return variants.get(0);
+		}
+		TypedBoardPoint firstVariant = variants.get(0);
+		TypedBoardPoint secondVariant = variants.get(1);
+		// don't stay on your own BOMB forever
+		if (firstVariant.equals(centerPoint)
+				&& firstVariant.getBoardElement() == BoardElement.BOMB_BOMBERMAN
+				&& secondVariant.getExplosionInfo().getStatus() != ExplosionStatus.NEXT_TICK) {
+			return secondVariant;
+		}
+		return variants.get(0);
 	}
 
 	private Optional<PathPoint> getPathToDestination(

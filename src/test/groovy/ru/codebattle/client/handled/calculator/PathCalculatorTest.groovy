@@ -351,4 +351,67 @@ class PathCalculatorTest extends Specification {
 		then:
 			nextPoint != bomberman.shiftLeft().get() && nextPoint != bomberman.shiftBottom().get()
 	}
+
+	def "don't stay if can't reach the goal"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼
+				☼  ♥   ☼
+				☼☼☼☼☼☼☼☼
+				☼      ☼
+				☼  ☻   ☼
+				☼      ☼
+				☼      ☼
+				☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			def bomberman = board.getBomberman()
+			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+		then:
+			nextPoint != bomberman
+	}
+
+	def "stay on the same place"() {
+		given:
+			String map = '''
+				☼☼☼☼☼☼☼☼
+				☼  ♥   ☼
+				☼      ☼
+				☼   1  ☼
+				☼  ☻   ☼
+				☼ 1    ☼
+				☼      ☼
+				☼☼☼☼☼☼☼☼
+			'''
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			def bomberman = board.getBomberman()
+			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+		when:
+			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+		then:
+			nextPoint == bomberman
+	}
+
+//	def "stay on the line"() {
+//		given:
+//			String map = '''
+//				☼☼☼☼☼☼☼☼
+//				☼      ☼
+//				☼☼☼☼☼☼☼☼
+//				☼   ☺ 3☼
+//				☼ ♥   2☼
+//				☼  ☼☼☼☼☼
+//				☼      ☼
+//				☼☼☼☼☼☼☼☼
+//			'''
+//			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+//			def bomberman = board.getBomberman()
+//			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+//		when:
+//			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+//		then:
+//			nextPoint == bomberman.shiftLeft().get()
+//	}
 }
