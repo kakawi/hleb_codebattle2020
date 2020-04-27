@@ -42,8 +42,10 @@ public class TickHandler {
 		TypedBoardPoint bombermanPoint = gameBoard.getBomberman();
 
 		if (gameBoard.amIDead()) { // TODO
+			TurnAction action = new TurnAction(false, Direction.STOP);
+			history.add(gameBoard, null, bombermanPoint, null, bombsController.getMyBombs(), action, false);
 			history.printHistory();
-			return new TurnAction(false, Direction.STOP);
+			return action;
 		}
 
 		TypedBoardPoint destinationPoint = destinationStrategyManager.getDestinationPoint(gameBoard);

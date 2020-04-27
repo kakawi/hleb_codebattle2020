@@ -7,14 +7,13 @@ import ru.codebattle.client.handled.TypedBoardPoint;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
 
 import java.util.ArrayDeque;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
 
 @Slf4j
 public class History {
 
-	private static final int STEP_BUFFER = 3;
+	private static final int STEP_BUFFER = 5;
 	private final Queue<HistoryStep> history = new ArrayDeque<>();
 
 	public void add(
