@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
+import ru.codebattle.client.handled.strategy.plant.BombsControllerImpl;
 import ru.codebattle.client.handled.strategy.plant.DiagonalPlantStrategy;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategy;
@@ -45,6 +46,6 @@ public class PlantStrategyConfig {
 
 	@Bean
 	public BombsController bombsController() {
-		return new BombsController();
+		return new BombsControllerImpl();
 	}
 }

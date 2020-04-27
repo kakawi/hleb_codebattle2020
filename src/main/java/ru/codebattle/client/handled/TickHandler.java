@@ -18,7 +18,7 @@ public class TickHandler {
 	private final PathCalculator pathCalculator;
 	private final PlantStrategiesManager plantStrategiesManager;
 	private final BombsController bombsController;
-	private final History history;
+	private final History  history;
 
 	public TickHandler(
 			DestinationStrategyManager destinationStrategyManager,

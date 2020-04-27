@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.codebattle.client.api.TurnAction;
 import ru.codebattle.client.handled.HandledGameBoard;
 import ru.codebattle.client.handled.TypedBoardPoint;
-import ru.codebattle.client.handled.strategy.plant.BombsController;
+import ru.codebattle.client.handled.strategy.plant.BombsControllerImpl;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public class HistoryStep {
 	private final TypedBoardPoint destinationPoint;
 	private final TypedBoardPoint currentPoint;
 	private final TypedBoardPoint nextPoint;
-	private final Map<TypedBoardPoint, BombsController.StatusOfMyBomb> myBombs;
+	private final Map<TypedBoardPoint, BombsControllerImpl.StatusOfMyBomb> myBombs;
 	private final TurnAction action;
 	private final boolean isSetBomb;
 

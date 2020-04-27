@@ -9,13 +9,14 @@ import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
 import ru.codebattle.client.history.History;
+import ru.codebattle.client.history.HistoryImpl;
 
 @Configuration
 public class TickHandlerConfig {
 
 	@Bean
 	public History history() {
-		return new History();
+		return new HistoryImpl();
 	}
 
 	@Bean
