@@ -59,7 +59,7 @@ public class HandledGameBoard {
 	}
 
 	public Optional<TypedBoardPoint> getPoint(int x, int y) {
-		if (x >= size || x < 0 || y >= size || y < 0) {
+		if (x >= size - 1 || x <= 0 || y >= size - 1 || y <= 0) {
 			return Optional.empty();
 		}
 		return Optional.of(typedBoardPoints[x][y]);

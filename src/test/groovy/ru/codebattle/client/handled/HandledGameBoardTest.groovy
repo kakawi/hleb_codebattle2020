@@ -86,4 +86,32 @@ class HandledGameBoardTest extends Specification {
 			[BoardElement.OTHER_BOMB_BOMBERMAN, BoardElement.OTHER_BOMBERMAN] | 1      | 2
 			BoardElement.BOMBERMAN                                            | 100    | 1
 	}
+
+	def "don't return the borders"() {
+		String map = """
+				☼☼☼☼☼
+				☼   ☼
+				☼ ☺ ☼
+				☼   ☼
+				☼☼☼☼☼
+			"""
+		given:
+			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			def bomberman = board.getBomberman()
+		expect:
+			bomberman.shiftTop().isPresent()
+			bomberman.shiftRight().isPresent()
+			bomberman.shiftBottom().isPresent()
+			bomberman.shiftLeft().isPresent()
+
+			bomberman.shiftTop(2).isEmpty()
+			bomberman.shiftRight(2).isEmpty()
+			bomberman.shiftBottom(2).isEmpty()
+			bomberman.shiftLeft(2).isEmpty()
+
+			bomberman.shiftTop(100).isEmpty()
+			bomberman.shiftRight(100).isEmpty()
+			bomberman.shiftBottom(100).isEmpty()
+			bomberman.shiftLeft(100).isEmpty()
+	}
 }
