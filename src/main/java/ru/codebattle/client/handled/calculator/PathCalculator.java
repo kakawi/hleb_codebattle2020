@@ -70,7 +70,7 @@ public class PathCalculator {
 										  .filter(Optional::isPresent)
 										  .map(Optional::get)
 										  .filter(point -> point.getBoardElement()
-																	.isPassable() || point.equals(centerPoint))
+																	.isNextTickPassable() || point.equals(centerPoint))
 										  .sorted((p1, p2) -> p2.getExplosionInfo()
 																	.getStatus()
 																	.ordinal() - p1.getExplosionInfo()
@@ -156,7 +156,6 @@ public class PathCalculator {
 		return Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint.shiftLeft())
 					 .filter(Optional::isPresent)
 					 .map(Optional::get)
-					 .filter(point -> point.getBoardElement().isPassable())
 					 .filter(firstTickFilter(centralPathPoint))
 					 .map(point -> {
 						 double price = pathValueCalculator.calculateValueForStep(point, centralPathPoint.getTick(), centerPoint, gameBoard);
