@@ -1,5 +1,6 @@
 package ru.codebattle.client;
 
+import ru.codebattle.client.api.CodeBattleClient;
 import ru.codebattle.client.handled.TickHandler;
 import ru.codebattle.client.handled.TickHandlerImpl;
 import ru.codebattle.client.handled.calculator.PathCalculator;

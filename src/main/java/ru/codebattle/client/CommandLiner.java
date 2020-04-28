@@ -2,6 +2,7 @@ package ru.codebattle.client;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import ru.codebattle.client.api.CodeBattleClient;
 import ru.codebattle.client.handled.TickHandler;
 
 @Component

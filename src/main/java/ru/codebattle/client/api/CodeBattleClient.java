@@ -1,4 +1,4 @@
-package ru.codebattle.client;
+package ru.codebattle.client.api;
 
 import java.util.function.Function;
 
