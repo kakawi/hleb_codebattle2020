@@ -37,7 +37,7 @@ class TickHandlerTest extends Specification {
 			"""
 		given:
 			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
+			TickHandlerImpl tickHandler = new TickHandlerImpl(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
 		then:
@@ -63,7 +63,7 @@ class TickHandlerTest extends Specification {
 			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
 			TypedBoardPoint bombermanPoint = board.getBomberman()
 			ExplosionInfo explosionInfo = bombermanPoint.getExplosionInfo()
-			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
+			TickHandlerImpl tickHandler = new TickHandlerImpl(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
 			explosionInfo.getStatus() == ExplosionStatus.NEXT_TICK
@@ -91,7 +91,7 @@ class TickHandlerTest extends Specification {
 			PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager(Arrays.asList(
 					new DiagonalPlantStrategy()
 			));
-			TickHandler tickHandler = new TickHandler(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
+			TickHandlerImpl tickHandler = new TickHandlerImpl(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
 		then:

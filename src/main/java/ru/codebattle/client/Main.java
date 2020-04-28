@@ -1,6 +1,7 @@
 package ru.codebattle.client;
 
 import ru.codebattle.client.handled.TickHandler;
+import ru.codebattle.client.handled.TickHandlerImpl;
 import ru.codebattle.client.handled.calculator.PathCalculator;
 import ru.codebattle.client.handled.calculator.PathValueCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
@@ -23,7 +24,7 @@ public class Main {
         BombsController bombsController = new BombsControllerImpl();
         PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager(Arrays.asList(new SmartPlantStrategy(bombsController)));
         History history = new HistoryImpl();
-        TickHandler tickHandler = new TickHandler(destinationStrategyManager, pathCalculator, plantStrategiesManager, bombsController, history);
+        TickHandler tickHandler = new TickHandlerImpl(destinationStrategyManager, pathCalculator, plantStrategiesManager, bombsController, history);
 
         CodeBattleClient codeBattleClient = new CodeBattleClient("http://codebattle2020s1.westeurope.cloudapp.azure.com/codenjoy-contest/board/player/3f1pmuv22xboeomi7ts3?code=5836526866745355424");
         codeBattleClient.run(tickHandler::handle);
