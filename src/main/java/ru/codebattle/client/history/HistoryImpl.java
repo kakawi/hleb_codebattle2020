@@ -2,8 +2,8 @@ package ru.codebattle.client.history;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.codebattle.client.api.TurnAction;
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 import ru.codebattle.client.handled.strategy.plant.BombsControllerImpl;
 
 import java.util.ArrayDeque;
@@ -18,16 +18,16 @@ public class HistoryImpl implements History {
 
 	@Override
 	public void add(
-			HandledGameBoard handledGameBoard,
-			TypedBoardPoint destinationPoint,
-			TypedBoardPoint currentPoint,
-			TypedBoardPoint nextPoint,
-			Map<TypedBoardPoint, BombsControllerImpl.StatusOfMyBomb> myBombs,
+			GameBoard gameBoard,
+			BoardPoint destinationPoint,
+			BoardPoint currentPoint,
+			BoardPoint nextPoint,
+			Map<BoardPoint, BombsControllerImpl.StatusOfMyBomb> myBombs,
 			TurnAction action,
 			boolean isSetBomb
 	) {
 		HistoryStep step = HistoryStep.builder()
-									  .handledGameBoard(handledGameBoard)
+									  .gameBoard(gameBoard)
 									  .destinationPoint(destinationPoint)
 									  .currentPoint(currentPoint)
 									  .nextPoint(nextPoint)

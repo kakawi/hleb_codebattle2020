@@ -1,10 +1,12 @@
 package ru.codebattle.client.handled
 
 import ru.codebattle.client.api.BoardElement
+import ru.codebattle.client.api.GameBoard
+import ru.codebattle.client.api.BoardPoint
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class HandledGameBoardTest extends Specification {
+class GameBoardTest extends Specification {
 	def "size"() {
 		String map = '''
 				☼☼☼☼
@@ -13,7 +15,7 @@ class HandledGameBoardTest extends Specification {
 				☼☼☼☼
 			'''
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 		expect:
 			board.size() == 4
 	}
@@ -28,9 +30,9 @@ class HandledGameBoardTest extends Specification {
 				☼☼☼☼
 			"""
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 		expect:
-			board.getBomberman() == new TypedBoardPoint(2, 1, bombermanSymbol, board)
+			board.getBomberman() == new BoardPoint(2, 1, bombermanSymbol, board)
 		where:
 			bombermanSymbol             | _
 			BoardElement.BOMBERMAN      | _
@@ -67,15 +69,15 @@ class HandledGameBoardTest extends Specification {
 				☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 			"""
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bomberman = board.getBomberman()
 			int x1 = bomberman.getX() - radius
 			int x2 = bomberman.getX() + radius
 			int y1 = bomberman.getY() - radius
 			int y2 = bomberman.getY() + radius
 		when:
-			Collection<TypedBoardPoint> elements = board.getElementsInRectangle(x1, y1, x2, y2, elementType as BoardElement[])
-			Collection<TypedBoardPoint> elementsFromCenter = board.getElementsInRectangle(bomberman.getX(), bomberman.getY(), radius, elementType as BoardElement[])
+			Collection<BoardPoint> elements = board.getElementsInRectangle(x1, y1, x2, y2, elementType as BoardElement[])
+			Collection<BoardPoint> elementsFromCenter = board.getElementsInRectangle(bomberman.getX(), bomberman.getY(), radius, elementType as BoardElement[])
 		then:
 			elements.size() == countOfElements
 			elements == elementsFromCenter
@@ -96,7 +98,7 @@ class HandledGameBoardTest extends Specification {
 				☼☼☼☼☼
 			"""
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
 		expect:
 			bomberman.shiftTop().isPresent()

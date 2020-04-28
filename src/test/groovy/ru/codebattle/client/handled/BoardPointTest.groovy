@@ -1,8 +1,10 @@
 package ru.codebattle.client.handled
 
+import ru.codebattle.client.api.GameBoard
+import ru.codebattle.client.api.BoardPoint
 import spock.lang.Specification
 
-class TypedBoardPointTest extends Specification {
+class BoardPointTest extends Specification {
 	def "will be destroyed #1"() {
 		given:
 			String map = '''
@@ -15,8 +17,8 @@ class TypedBoardPointTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint point = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint point = board.getDestroyableWalls().iterator().next()
 		expect:
 			point.isWillBeDestoyed()
 	}
@@ -33,8 +35,8 @@ class TypedBoardPointTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint point = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint point = board.getDestroyableWalls().iterator().next()
 		expect:
 			point.isWillBeDestoyed()
 	}
@@ -51,8 +53,8 @@ class TypedBoardPointTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint point = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint point = board.getDestroyableWalls().iterator().next()
 		expect:
 			point.isWillBeDestoyed()
 	}
@@ -69,8 +71,8 @@ class TypedBoardPointTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint point = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint point = board.getDestroyableWalls().iterator().next()
 		expect:
 			point.isWillBeDestoyed()
 	}
@@ -87,8 +89,8 @@ class TypedBoardPointTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint point = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint point = board.getDestroyableWalls().iterator().next()
 		expect:
 			point.isWillBeDestoyed()
 	}
@@ -108,8 +110,8 @@ class TypedBoardPointTest extends Specification {
 				☼    1    ☼
 				☼☼☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint point = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint point = board.getDestroyableWalls().iterator().next()
 		expect:
 			!point.isWillBeDestoyed()
 	}
@@ -124,9 +126,9 @@ class TypedBoardPointTest extends Specification {
 				☼    ☼
 				☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		expect:
 			wall.canBeDestroyedFrom(bomberman)
 	}
@@ -141,9 +143,9 @@ class TypedBoardPointTest extends Specification {
 				☼    ☼
 				☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		expect:
 			wall.canBeDestroyedFrom(bomberman)
 	}
@@ -158,9 +160,9 @@ class TypedBoardPointTest extends Specification {
 				☼#   ☼
 				☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		expect:
 			wall.canBeDestroyedFrom(bomberman)
 	}
@@ -175,9 +177,9 @@ class TypedBoardPointTest extends Specification {
 				☼☺   ☼
 				☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		expect:
 			wall.canBeDestroyedFrom(bomberman)
 	}

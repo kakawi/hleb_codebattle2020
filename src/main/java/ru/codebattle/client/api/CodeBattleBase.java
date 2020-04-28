@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import ru.codebattle.client.handled.HandledGameBoard;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,7 +23,7 @@ public abstract class CodeBattleBase extends WebSocketClient {
     @Getter
     private boolean shouldExit = false;
 
-    protected abstract String doMove(HandledGameBoard bomberManGameBoard);
+    protected abstract String doMove(GameBoard bomberManGameBoard);
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
@@ -41,7 +40,7 @@ public abstract class CodeBattleBase extends WebSocketClient {
             } else {
                 String boardString = message.substring(responsePrefix.length());
                 log.info("Before `doMove`");
-                String action = doMove(new HandledGameBoard(boardString));
+                String action = doMove(new GameBoard(boardString));
                 log.info("Action: " + action);
                 send(action);
                 log.info("An Action is sent");

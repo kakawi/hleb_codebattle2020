@@ -1,6 +1,4 @@
-package ru.codebattle.client.handled;
-
-import ru.codebattle.client.api.BoardElement;
+package ru.codebattle.client.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,26 +6,26 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class HandledGameBoard {
+public class GameBoard {
 
 	private final String boardString;
 	private final int size;
-	private final TypedBoardPoint[][] typedBoardPoints;
-	private TypedBoardPoint bomberman;
-	private Collection<TypedBoardPoint> otherBombermans = new HashSet<>();
-	private Collection<TypedBoardPoint> meatChoppers = new HashSet<>();
-	private Collection<TypedBoardPoint> destroyableWalls = new HashSet<>();
+	private final BoardPoint[][] boardPoints;
+	private BoardPoint bomberman;
+	private Collection<BoardPoint> otherBombermans = new HashSet<>();
+	private Collection<BoardPoint> meatChoppers = new HashSet<>();
+	private Collection<BoardPoint> destroyableWalls = new HashSet<>();
 
-	public HandledGameBoard(String boardString) {
+	public GameBoard(String boardString) {
 		this.boardString = boardString;
 		this.size = (int) Math.sqrt(boardString.length());
-		typedBoardPoints = new TypedBoardPoint[size][size];
+		boardPoints = new BoardPoint[size][size];
 		int x = 0;
 		int y = 0;
 		for (char symbol : boardString.toCharArray()) {
 			BoardElement boardElement = BoardElement.valueOf(symbol);
-			TypedBoardPoint point = new TypedBoardPoint(x, y, boardElement, this);
-			typedBoardPoints[x][y] = point;
+			BoardPoint point = new BoardPoint(x, y, boardElement, this);
+			boardPoints[x][y] = point;
 			switch (boardElement) {
 				case BOMBERMAN:
 				case BOMB_BOMBERMAN:
@@ -58,18 +56,18 @@ public class HandledGameBoard {
 		return size;
 	}
 
-	public Optional<TypedBoardPoint> getPoint(int x, int y) {
+	public Optional<BoardPoint> getPoint(int x, int y) {
 		if (x >= size - 1 || x <= 0 || y >= size - 1 || y <= 0) {
 			return Optional.empty();
 		}
-		return Optional.of(typedBoardPoints[x][y]);
+		return Optional.of(boardPoints[x][y]);
 	}
 
-	public Collection<TypedBoardPoint> getWalls() {
+	public Collection<BoardPoint> getWalls() {
 		return null;
 	}
 
-	public TypedBoardPoint getBomberman() {
+	public BoardPoint getBomberman() {
 		return bomberman;
 	}
 
@@ -77,27 +75,27 @@ public class HandledGameBoard {
 		return BoardElement.DEAD_BOMBERMAN == bomberman.getBoardElement();
 	}
 
-	public Collection<TypedBoardPoint> getOtherBombermans() {
+	public Collection<BoardPoint> getOtherBombermans() {
 		return otherBombermans;
 	}
 
-	public Collection<TypedBoardPoint> getDestroyableWalls() {
+	public Collection<BoardPoint> getDestroyableWalls() {
 		return destroyableWalls;
 	}
 
-	public Collection<TypedBoardPoint> getMeatChoppers() {
+	public Collection<BoardPoint> getMeatChoppers() {
 		return meatChoppers;
 	}
 
-	public Collection<TypedBoardPoint> getBlasts() {
+	public Collection<BoardPoint> getBlasts() {
 		return null;
 	}
 
-	public Collection<TypedBoardPoint> getBombs() {
+	public Collection<BoardPoint> getBombs() {
 		return null;
 	}
 
-	public Collection<TypedBoardPoint> getBarriers() {
+	public Collection<BoardPoint> getBarriers() {
 		return null;
 	}
 
@@ -109,25 +107,25 @@ public class HandledGameBoard {
 		} return stringBuilder.toString();
 	}
 
-	public Collection<TypedBoardPoint> getElementsInRectangle(
+	public Collection<BoardPoint> getElementsInRectangle(
 			int x1, int y1, int x2, int y2, BoardElement... elementType
 	) {
-		Collection<TypedBoardPoint> result = new ArrayList<>();
+		Collection<BoardPoint> result = new ArrayList<>();
 		Set<BoardElement> elementTypes = Set.of(elementType);
 		for (int i = Math.max(0, x1); i <= Math.min(size - 1, x2); i++) {
 			for (int j = Math.max(0, y1); j <= Math.min(size - 1, y2); j++) {
-				if (elementTypes.contains(typedBoardPoints[i][j].getBoardElement())) {
-					result.add(typedBoardPoints[i][j]);
+				if (elementTypes.contains(boardPoints[i][j].getBoardElement())) {
+					result.add(boardPoints[i][j]);
 				}
 			}
 		}
 		return result;
 	}
 
-	public Collection<TypedBoardPoint> getElementsInRectangle(
+	public Collection<BoardPoint> getElementsInRectangle(
 			int x, int y, int radius, BoardElement... elementType
 	) {
-		Collection<TypedBoardPoint> result = new ArrayList<>();
+		Collection<BoardPoint> result = new ArrayList<>();
 		Set<BoardElement> elementTypes = Set.of(elementType);
 		int x1 = Math.max(0, x - radius);
 		int x2 = Math.min(size - 1, x + radius);
@@ -135,8 +133,8 @@ public class HandledGameBoard {
 		int y2 = Math.min(size - 1, y + radius);
 		for (int i = x1; i <= x2; i++) {
 			for (int j = y1; j <= y2; j++) {
-				if (elementTypes.contains(typedBoardPoints[i][j].getBoardElement())) {
-					result.add(typedBoardPoints[i][j]);
+				if (elementTypes.contains(boardPoints[i][j].getBoardElement())) {
+					result.add(boardPoints[i][j]);
 				}
 			}
 		}

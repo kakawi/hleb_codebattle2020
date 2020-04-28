@@ -3,8 +3,8 @@ package ru.codebattle.client.handled.calculator;
 import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -21,8 +21,8 @@ public class PathCalculator {
 
 	public PathCalculator(PathValueCalculator pathValueCalculator) {this.pathValueCalculator = pathValueCalculator;}
 
-	public TypedBoardPoint getNextPoint(HandledGameBoard gameBoard, TypedBoardPoint destinationPoint) {
-		TypedBoardPoint initialPosition = gameBoard.getBomberman();
+	public BoardPoint getNextPoint(GameBoard gameBoard, BoardPoint destinationPoint) {
+		BoardPoint initialPosition = gameBoard.getBomberman();
 
 		Set<PathPoint> alreadyOpenedPoints = new HashSet<>();
 		Set<PathPoint> visitedPoints = new HashSet<>();
@@ -60,32 +60,32 @@ public class PathCalculator {
 		return lastPathPoint.getPoint();
 	}
 
-	private boolean doINeedToTrySurvive(TypedBoardPoint initialPosition) {
+	private boolean doINeedToTrySurvive(BoardPoint initialPosition) {
 		return initialPosition.getExplosionInfo().getStatus() == ExplosionStatus.NEXT_TICK;
 	}
 
-	private TypedBoardPoint theBestMove(TypedBoardPoint centerPoint) {
-		List<TypedBoardPoint> variants = Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint
+	private BoardPoint theBestMove(BoardPoint centerPoint) {
+		List<BoardPoint> variants = Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint
 				.shiftLeft(), Optional.of(centerPoint))
-											  .filter(Optional::isPresent)
-											  .map(Optional::get)
-											  .filter(point -> point.getBoardElement()
+										  .filter(Optional::isPresent)
+										  .map(Optional::get)
+										  .filter(point -> point.getBoardElement()
 																	.isPassable() || point.equals(centerPoint))
-											  .sorted((p1, p2) -> p2.getExplosionInfo()
+										  .sorted((p1, p2) -> p2.getExplosionInfo()
 																	.getStatus()
 																	.ordinal() - p1.getExplosionInfo()
 																				   .getStatus()
 																				   .ordinal())
-											  .limit(2)
-											  .collect(Collectors.toList());
+										  .limit(2)
+										  .collect(Collectors.toList());
 		if (variants.isEmpty()) {
 			return centerPoint;
 		}
 		if (variants.size() == 1) {
 			return variants.get(0);
 		}
-		TypedBoardPoint firstVariant = variants.get(0);
-		TypedBoardPoint secondVariant = variants.get(1);
+		BoardPoint firstVariant = variants.get(0);
+		BoardPoint secondVariant = variants.get(1);
 		// don't stay on your own BOMB forever
 		if (firstVariant.equals(centerPoint)
 				&& firstVariant.getBoardElement() == BoardElement.BOMB_BOMBERMAN
@@ -96,10 +96,10 @@ public class PathCalculator {
 	}
 
 	private Optional<PathPoint> getPathToDestination(
-			TypedBoardPoint destinationPoint,
+			BoardPoint destinationPoint,
 			PathPoint currentMinPoint,
 			Set<PathPoint> alreadyOpenedPoints,
-			Set<PathPoint> visitedPoints, HandledGameBoard gameBoard
+			Set<PathPoint> visitedPoints, GameBoard gameBoard
 	) {
 		while (!destinationPoint.canBeDestroyedFrom(currentMinPoint.getPoint())) {
 			visitedPoints.add(currentMinPoint);
@@ -122,7 +122,7 @@ public class PathCalculator {
 			Set<PathPoint> alreadyOpenedPoints,
 			PathPoint currentMinPoint,
 			Set<PathPoint> visitedPoints,
-			HandledGameBoard gameBoard
+			GameBoard gameBoard
 	) {
 		for (PathPoint openedPoint : alreadyOpenedPoints) {
 			if (visitedPoints.contains(openedPoint)) {
@@ -150,9 +150,9 @@ public class PathCalculator {
 	}
 
 	private Set<PathPoint> openNewPoints(
-			PathPoint centralPathPoint, Set<PathPoint> alreadyOpenedPoints, HandledGameBoard gameBoard
+			PathPoint centralPathPoint, Set<PathPoint> alreadyOpenedPoints, GameBoard gameBoard
 	) {
-		TypedBoardPoint centerPoint = centralPathPoint.getPoint();
+		BoardPoint centerPoint = centralPathPoint.getPoint();
 		return Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint.shiftLeft())
 					 .filter(Optional::isPresent)
 					 .map(Optional::get)
@@ -166,7 +166,7 @@ public class PathCalculator {
 					 .collect(Collectors.toSet());
 	}
 
-	private Predicate<TypedBoardPoint> firstTickFilter(PathPoint centralPathPoint) {
+	private Predicate<BoardPoint> firstTickFilter(PathPoint centralPathPoint) {
 		return point -> centralPathPoint.getTick() == 0 && point.getBoardElement().isNextTickPassable()
 				|| centralPathPoint.getTick() != 0 && point.getBoardElement().isPassable();
 	}

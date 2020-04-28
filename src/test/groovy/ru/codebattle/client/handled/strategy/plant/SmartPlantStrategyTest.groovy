@@ -1,7 +1,7 @@
 package ru.codebattle.client.handled.strategy.plant
 
-import ru.codebattle.client.handled.HandledGameBoard
-import ru.codebattle.client.handled.TypedBoardPoint
+import ru.codebattle.client.api.GameBoard
+import ru.codebattle.client.api.BoardPoint
 import ru.codebattle.client.handled.Utils
 import spock.lang.Specification
 
@@ -28,9 +28,9 @@ class SmartPlantStrategyTest extends Specification {
 				☼       ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bomberman = board.getBomberman()
-			TypedBoardPoint nextPosition = bomberman.shiftBottom().get()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bomberman = board.getBomberman()
+			BoardPoint nextPosition = bomberman.shiftBottom().get()
 		expect:
 			!smartPlantStrategy.doPlantBomb(board, bomberman, nextPosition)
 	}
@@ -48,8 +48,8 @@ class SmartPlantStrategyTest extends Specification {
 				☼       ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bomberman = board.getBomberman()
 		and:
 			bombsController.isOurBomb(_) >> true
 		expect:
@@ -69,8 +69,8 @@ class SmartPlantStrategyTest extends Specification {
 				☼       ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bomberman = board.getBomberman()
 		and:
 			bombsController.isOurBomb(_) >> true
 		expect:
@@ -90,8 +90,8 @@ class SmartPlantStrategyTest extends Specification {
 				☼ & 4   ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bomberman = board.getBomberman()
 		and:
 			bombsController.isOurBomb(_) >> true
 		expect:
@@ -111,8 +111,8 @@ class SmartPlantStrategyTest extends Specification {
 				☼       ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bomberman = board.getBomberman()
 		and:
 			bombsController.isOurBomb(_) >> true
 		expect:

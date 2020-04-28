@@ -1,7 +1,7 @@
 package ru.codebattle.client.handled.calculator
 
-import ru.codebattle.client.handled.HandledGameBoard
-import ru.codebattle.client.handled.TypedBoardPoint
+import ru.codebattle.client.api.GameBoard
+import ru.codebattle.client.api.BoardPoint
 import ru.codebattle.client.handled.Utils
 import spock.lang.Specification
 
@@ -22,10 +22,10 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getPoint(2, 2).get()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getPoint(2, 2).get()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint == board.getPoint(2, 5).get()
 	}
@@ -42,10 +42,10 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getPoint(3, 2).get()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getPoint(3, 2).get()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint == board.getPoint(3, 5).get()
 	}
@@ -62,10 +62,10 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getPoint(2, 2).get()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getPoint(2, 2).get()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint == board.getPoint(1, 4).get()
 	}
@@ -83,10 +83,10 @@ class PathCalculatorTest extends Specification {
 				☼       ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getDestroyableWalls().iterator().next()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getDestroyableWalls().iterator().next()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint == board.getPoint(2, 3).get()
 	}
@@ -103,10 +103,10 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getPoint(2, 3).get()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getPoint(2, 3).get()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint != board.getPoint(2, 4).get()
 	}
@@ -123,11 +123,11 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getPoint(2, 2).get()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getPoint(2, 2).get()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint != bomberman
 			nextPoint == board.getPoint(1, 4).get() || nextPoint == board.getPoint(3, 4).get()
@@ -145,11 +145,11 @@ class PathCalculatorTest extends Specification {
 				☼    # ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getPoint(2, 2).get()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getPoint(2, 2).get()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint == bomberman
 	}
@@ -166,11 +166,11 @@ class PathCalculatorTest extends Specification {
 				☼    # ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint wall = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint wall = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, wall)
 		then:
 			nextPoint == bomberman
 	}
@@ -188,11 +188,11 @@ class PathCalculatorTest extends Specification {
 				☼       ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
 		then:
 			nextPoint == bomberman
 	}
@@ -210,11 +210,11 @@ class PathCalculatorTest extends Specification {
 				☼ ☼     ☼
 				☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
 		then:
 			nextPoint == bomberman.shiftRight().get() || nextPoint == bomberman.shiftLeft().get()
 	}
@@ -234,11 +234,11 @@ class PathCalculatorTest extends Specification {
 				☼       4 ☼
 				☼☼☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint destinationPoint = board.getDestroyableWalls().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
 		then:
 			nextPoint != bomberman.shiftLeft().get()
 	}
@@ -259,11 +259,11 @@ class PathCalculatorTest extends Specification {
 				☼          ☼
 				☼☼☼☼☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint destinationPoint = board.getMeatChoppers().iterator().next()
-			TypedBoardPoint bomberman = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint destinationPoint = board.getMeatChoppers().iterator().next()
+			BoardPoint bomberman = board.getBomberman()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, destinationPoint)
 		then:
 			nextPoint != bomberman.shiftBottom().get()
 	}
@@ -280,11 +280,11 @@ class PathCalculatorTest extends Specification {
 				☼  ☼   ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
-			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+			BoardPoint competitor = board.getOtherBombermans().iterator().next()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 		then:
 			nextPoint == bomberman.shiftLeft().get()
 	}
@@ -301,11 +301,11 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
-			TypedBoardPoint competitor = board.getPoint(6, 1).get()
+			BoardPoint competitor = board.getPoint(6, 1).get()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 		then:
 			nextPoint == bomberman.shiftLeft().get()
 	}
@@ -322,11 +322,11 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
-			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+			BoardPoint competitor = board.getOtherBombermans().iterator().next()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 		then:
 			nextPoint != bomberman.shiftLeft().get() && nextPoint != bomberman.shiftBottom().get()
 	}
@@ -343,11 +343,11 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
-			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+			BoardPoint competitor = board.getOtherBombermans().iterator().next()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 		then:
 			nextPoint != bomberman.shiftLeft().get() && nextPoint != bomberman.shiftBottom().get()
 	}
@@ -364,11 +364,11 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
-			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+			BoardPoint competitor = board.getOtherBombermans().iterator().next()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 		then:
 			nextPoint != bomberman
 	}
@@ -385,11 +385,11 @@ class PathCalculatorTest extends Specification {
 				☼      ☼
 				☼☼☼☼☼☼☼☼
 			'''
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			def bomberman = board.getBomberman()
-			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+			BoardPoint competitor = board.getOtherBombermans().iterator().next()
 		when:
-			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 		then:
 			nextPoint == bomberman
 	}

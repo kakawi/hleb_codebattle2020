@@ -1,10 +1,10 @@
 package ru.codebattle.client.handled.strategy.move;
 
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 
 import java.util.Optional;
 
 public interface DestinationStrategy {
-	Optional<TypedBoardPoint> getDestinationBoardPoint(HandledGameBoard gameBoard);
+	Optional<BoardPoint> getDestinationBoardPoint(GameBoard gameBoard);
 }

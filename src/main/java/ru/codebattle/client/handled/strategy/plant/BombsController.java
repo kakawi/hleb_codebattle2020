@@ -1,17 +1,17 @@
 package ru.codebattle.client.handled.strategy.plant;
 
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 
 import java.util.Map;
 
 public interface BombsController {
 
-	boolean isOurBomb(TypedBoardPoint point);
+	boolean isOurBomb(BoardPoint point);
 
-	void plantBomb(TypedBoardPoint point);
+	void plantBomb(BoardPoint point);
 
-	void tick(HandledGameBoard gameBoard);
+	void tick(GameBoard gameBoard);
 
-	Map<TypedBoardPoint, BombsControllerImpl.StatusOfMyBomb> getMyBombs();
+	Map<BoardPoint, BombsControllerImpl.StatusOfMyBomb> getMyBombs();
 }

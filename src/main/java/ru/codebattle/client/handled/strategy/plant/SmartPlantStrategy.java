@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 
 @Slf4j
 public class SmartPlantStrategy implements PlantStrategy {
@@ -22,9 +22,9 @@ public class SmartPlantStrategy implements PlantStrategy {
 
 	@Override
 	public boolean doPlantBomb(
-			HandledGameBoard gameBoard,
-			TypedBoardPoint currentPosition,
-			TypedBoardPoint nextPosition
+			GameBoard gameBoard,
+			BoardPoint currentPosition,
+			BoardPoint nextPosition
 	) {
 		int x = currentPosition.getX();
 		int y = currentPosition.getY();
@@ -40,7 +40,7 @@ public class SmartPlantStrategy implements PlantStrategy {
 													 .isEmpty();
 
 		ExplosionInfo currentPositionExplosionInfo = currentPosition.getExplosionInfo();
-		TypedBoardPoint currentPositionTheFirstBombToExplode = currentPositionExplosionInfo.getPointWithBomb();
+		BoardPoint currentPositionTheFirstBombToExplode = currentPositionExplosionInfo.getPointWithBomb();
 
 		boolean currentPositionOurBombWillExploded = bombsController.isOurBomb(currentPositionTheFirstBombToExplode);
 		SituationAround situationAround = SituationAround.builder()
@@ -87,7 +87,7 @@ public class SmartPlantStrategy implements PlantStrategy {
 		return false;
 	}
 
-	private boolean isSuicide(TypedBoardPoint nextPoint) {
+	private boolean isSuicide(BoardPoint nextPoint) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		boolean isOurBomb = bombsController.isOurBomb(explosionInfo.getPointWithBomb());
 		return explosionInfo.getStatus() == ExplosionStatus.NEXT_TICK && isOurBomb;

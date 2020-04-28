@@ -2,8 +2,8 @@ package ru.codebattle.client.handled.strategy.plant;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.codebattle.client.api.BoardElement;
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,23 +13,23 @@ import java.util.Optional;
 @Slf4j
 public class BombsControllerImpl implements BombsController {
 
-	private Map<TypedBoardPoint, StatusOfMyBomb> myBombs = new HashMap<>();
+	private Map<BoardPoint, StatusOfMyBomb> myBombs = new HashMap<>();
 
 	@Override
-	public boolean isOurBomb(TypedBoardPoint point) {
+	public boolean isOurBomb(BoardPoint point) {
 		return myBombs.containsKey(point);
 	}
 
 	@Override
-	public void plantBomb(TypedBoardPoint point) {
+	public void plantBomb(BoardPoint point) {
 		myBombs.put(point, StatusOfMyBomb.TICK_4);
 	}
 
 	@Override
-	public void tick(HandledGameBoard gameBoard) {
-		Iterator<Map.Entry<TypedBoardPoint, StatusOfMyBomb>> iterator = myBombs.entrySet().iterator();
+	public void tick(GameBoard gameBoard) {
+		Iterator<Map.Entry<BoardPoint, StatusOfMyBomb>> iterator = myBombs.entrySet().iterator();
 		while (iterator.hasNext()) {
-			Map.Entry<TypedBoardPoint, StatusOfMyBomb> next = iterator.next();
+			Map.Entry<BoardPoint, StatusOfMyBomb> next = iterator.next();
 			switch (next.getValue()) {
 				case EXPLODED:
 					iterator.remove();
@@ -48,11 +48,11 @@ public class BombsControllerImpl implements BombsController {
 	}
 
 	@Override
-	public Map<TypedBoardPoint, StatusOfMyBomb> getMyBombs() {
+	public Map<BoardPoint, StatusOfMyBomb> getMyBombs() {
 		return new HashMap<>(myBombs);
 	}
 
-	private void decreaseStatus(Map.Entry<TypedBoardPoint, StatusOfMyBomb> next) {
+	private void decreaseStatus(Map.Entry<BoardPoint, StatusOfMyBomb> next) {
 		switch (next.getValue()) {
 			case TICK_4:
 				next.setValue(StatusOfMyBomb.TICK_3);
@@ -69,14 +69,14 @@ public class BombsControllerImpl implements BombsController {
 		}
 	}
 
-	private boolean check(Map.Entry<TypedBoardPoint, StatusOfMyBomb> next, HandledGameBoard gameBoard) {
-		TypedBoardPoint savedPoint = next.getKey();
-		Optional<TypedBoardPoint> optionalCurrentPoint = gameBoard.getPoint(savedPoint.getX(), savedPoint.getY());
+	private boolean check(Map.Entry<BoardPoint, StatusOfMyBomb> next, GameBoard gameBoard) {
+		BoardPoint savedPoint = next.getKey();
+		Optional<BoardPoint> optionalCurrentPoint = gameBoard.getPoint(savedPoint.getX(), savedPoint.getY());
 		if (optionalCurrentPoint.isEmpty()) {
 			log.error("The bomb is disappeared");
 			return false;
 		}
-		TypedBoardPoint currentPoint = optionalCurrentPoint.get();
+		BoardPoint currentPoint = optionalCurrentPoint.get();
 		StatusOfMyBomb savedStatus = next.getValue();
 		BoardElement currentElement = currentPoint.getBoardElement();
 		if (currentElement == BoardElement.BOMB_BOMBERMAN) {

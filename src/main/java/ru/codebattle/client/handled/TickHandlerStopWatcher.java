@@ -2,6 +2,7 @@ package ru.codebattle.client.handled;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
+import ru.codebattle.client.api.GameBoard;
 import ru.codebattle.client.api.TurnAction;
 
 @Slf4j
@@ -13,7 +14,7 @@ public class TickHandlerStopWatcher implements TickHandler {
 	public TickHandlerStopWatcher(TickHandler tickHandler) {this.tickHandler = tickHandler;}
 
 	@Override
-	public TurnAction handle(HandledGameBoard gameBoard) {
+	public TurnAction handle(GameBoard gameBoard) {
 		stopWatch.reset();
 		stopWatch.start();
 

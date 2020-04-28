@@ -2,7 +2,9 @@ package ru.codebattle.client.handled;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.codebattle.client.api.Direction;
+import ru.codebattle.client.api.GameBoard;
 import ru.codebattle.client.api.TurnAction;
+import ru.codebattle.client.api.BoardPoint;
 import ru.codebattle.client.handled.calculator.PathCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
@@ -34,10 +36,10 @@ public class TickHandlerImpl implements TickHandler {
 	}
 
 	@Override
-	public TurnAction handle(HandledGameBoard gameBoard) {
+	public TurnAction handle(GameBoard gameBoard) {
 		bombsController.tick(gameBoard);
 
-		TypedBoardPoint bombermanPoint = gameBoard.getBomberman();
+		BoardPoint bombermanPoint = gameBoard.getBomberman();
 
 		if (gameBoard.amIDead()) {
 			TurnAction action = new TurnAction(false, Direction.STOP);
@@ -46,9 +48,9 @@ public class TickHandlerImpl implements TickHandler {
 			return action;
 		}
 
-		TypedBoardPoint destinationPoint = destinationStrategyManager.getDestinationPoint(gameBoard);
+		BoardPoint destinationPoint = destinationStrategyManager.getDestinationPoint(gameBoard);
 
-		TypedBoardPoint nextPoint = pathCalculator.getNextPoint(gameBoard, destinationPoint);
+		BoardPoint nextPoint = pathCalculator.getNextPoint(gameBoard, destinationPoint);
 		Direction direction = findBestDirection(bombermanPoint, nextPoint);
 
 		boolean act = plantStrategiesManager.doPlantBomb(gameBoard, bombermanPoint, nextPoint);
@@ -64,7 +66,7 @@ public class TickHandlerImpl implements TickHandler {
 		return action;
 	}
 
-	private Direction findBestDirection(TypedBoardPoint bombermanPoint, TypedBoardPoint bestNextPoint) {
+	private Direction findBestDirection(BoardPoint bombermanPoint, BoardPoint bestNextPoint) {
 		if (bombermanPoint.getY() > bestNextPoint.getY()) {
 			return Direction.UP;
 		}

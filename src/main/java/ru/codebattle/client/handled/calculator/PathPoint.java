@@ -3,7 +3,7 @@ package ru.codebattle.client.handled.calculator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.codebattle.client.handled.TypedBoardPoint;
+import ru.codebattle.client.api.BoardPoint;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 public class PathPoint {
 	private double price;
-	private final TypedBoardPoint point;
+	private final BoardPoint point;
 	private PathPoint previousPoint;
 
 	public void addPrice(double additional) {

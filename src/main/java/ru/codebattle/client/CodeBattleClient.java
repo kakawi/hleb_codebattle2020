@@ -4,25 +4,25 @@ import java.util.function.Function;
 
 import ru.codebattle.client.api.TurnAction;
 import ru.codebattle.client.api.CodeBattleBase;
-import ru.codebattle.client.handled.HandledGameBoard;
+import ru.codebattle.client.api.GameBoard;
 
 import java.net.URISyntaxException;
 
 public class CodeBattleClient extends CodeBattleBase {
 
-    private Function<HandledGameBoard, TurnAction> callback;
+    private Function<GameBoard, TurnAction> callback;
 
     public CodeBattleClient(String url) throws URISyntaxException {
         super(url);
     }
 
-    public void run(Function<HandledGameBoard, TurnAction> callback) {
+    public void run(Function<GameBoard, TurnAction> callback) {
         this.callback = callback;
         connect();
     }
 
     @Override
-    protected String doMove(HandledGameBoard gameBoard) {
+    protected String doMove(GameBoard gameBoard) {
         TurnAction action = callback.apply(gameBoard);
         return action.toString();
     }

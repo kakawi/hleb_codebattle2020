@@ -3,7 +3,9 @@ package ru.codebattle.client.handled
 
 import ru.codebattle.client.api.BoardElement
 import ru.codebattle.client.api.Direction
+import ru.codebattle.client.api.GameBoard
 import ru.codebattle.client.api.TurnAction
+import ru.codebattle.client.api.BoardPoint
 import ru.codebattle.client.handled.calculator.PathCalculator
 import ru.codebattle.client.handled.calculator.PathValueCalculator
 import ru.codebattle.client.handled.strategy.move.NearestBombermanStrategy
@@ -36,7 +38,7 @@ class TickHandlerTest extends Specification {
 				☼☼☼☼☼
 			"""
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			TickHandlerImpl tickHandler = new TickHandlerImpl(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
 			TurnAction action = tickHandler.handle(board)
@@ -60,8 +62,8 @@ class TickHandlerTest extends Specification {
 				☼☼☼☼☼☼
 			"""
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
-			TypedBoardPoint bombermanPoint = board.getBomberman()
+			GameBoard board = new GameBoard(Utils.clearMap(map))
+			BoardPoint bombermanPoint = board.getBomberman()
 			ExplosionInfo explosionInfo = bombermanPoint.getExplosionInfo()
 			TickHandlerImpl tickHandler = new TickHandlerImpl(strategyManager, pathCalculator, plantStrategiesManager, bombsController, history)
 		when:
@@ -84,7 +86,7 @@ class TickHandlerTest extends Specification {
 ☼☼☼☼☼☼☼☼☼
 			"""
 		given:
-			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+			GameBoard board = new GameBoard(Utils.clearMap(map))
 			DestinationStrategyManager strategyManager = new DestinationStrategyManager(Arrays.asList(
 					new NearestBombermanStrategy()
 			));

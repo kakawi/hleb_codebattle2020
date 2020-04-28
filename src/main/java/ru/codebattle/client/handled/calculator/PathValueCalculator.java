@@ -1,19 +1,14 @@
 package ru.codebattle.client.handled.calculator;
 
-import ru.codebattle.client.api.BoardElement;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
-import ru.codebattle.client.handled.HandledGameBoard;
-import ru.codebattle.client.handled.TypedBoardPoint;
-
-import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Stream;
+import ru.codebattle.client.api.GameBoard;
+import ru.codebattle.client.api.BoardPoint;
 
 public class PathValueCalculator {
 
 	public double calculateValueForStep(
-			TypedBoardPoint nextPoint, int tick, TypedBoardPoint fromPoint, HandledGameBoard gameBoard
+			BoardPoint nextPoint, int tick, BoardPoint fromPoint, GameBoard gameBoard
 	) {
 		switch (tick) {
 			case 0:
@@ -30,7 +25,7 @@ public class PathValueCalculator {
 	}
 
 	private double firstTick(
-			TypedBoardPoint nextPoint, TypedBoardPoint fromPoint, HandledGameBoard gameBoard
+			BoardPoint nextPoint, BoardPoint fromPoint, GameBoard gameBoard
 	) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		ExplosionStatus explosionStatus = explosionInfo.getStatus();
@@ -58,7 +53,7 @@ public class PathValueCalculator {
 		return price;
 	}
 
-	private double secondTick(TypedBoardPoint nextPoint) {
+	private double secondTick(BoardPoint nextPoint) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		ExplosionStatus explosionStatus = explosionInfo.getStatus();
 		int price;
@@ -79,7 +74,7 @@ public class PathValueCalculator {
 		return price;
 	}
 
-	private double thirdTick(TypedBoardPoint nextPoint) {
+	private double thirdTick(BoardPoint nextPoint) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		ExplosionStatus explosionStatus = explosionInfo.getStatus();
 		int price;
@@ -98,7 +93,7 @@ public class PathValueCalculator {
 		return price;
 	}
 
-	private double forthTick(TypedBoardPoint nextPoint) {
+	private double forthTick(BoardPoint nextPoint) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		ExplosionStatus explosionStatus = explosionInfo.getStatus();
 		int price;
@@ -115,7 +110,7 @@ public class PathValueCalculator {
 		return price;
 	}
 
-	private double othersTick(TypedBoardPoint nextPoint) {
+	private double othersTick(BoardPoint nextPoint) {
 		return 30;
 	}
 }
