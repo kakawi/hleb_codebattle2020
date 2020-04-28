@@ -64,7 +64,7 @@ public class TickHandler {
 		}
 
 		stopWatch.stop();
-		log.info("Handle time (microseconds): " + (stopWatch.getNanoTime() / 1_000_000.0));
+		log.info("Handle time (milliseconds): {}", (stopWatch.getNanoTime() / 1_000_000.0));
 
 		return action;
 	}
