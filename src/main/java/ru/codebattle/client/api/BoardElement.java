@@ -51,11 +51,11 @@ public enum BoardElement {
     }
 
     public boolean isNextTickPassable() {
-        return this == NONE || this == DESTROYED_WALL;
+        return this == NONE;
     }
 
     public boolean isPassable() {
-        return isNextTickPassable() || this == BOOM || this == DEAD_MEAT_CHOPPER || this == OTHER_DEAD_BOMBERMAN;
+        return isNextTickPassable() || this == BOOM || this == DEAD_MEAT_CHOPPER || this == OTHER_DEAD_BOMBERMAN || this == DESTROYED_WALL;
     }
 
     public boolean isProtectFromExplosion() {
