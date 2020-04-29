@@ -406,11 +406,11 @@ class PathCalculatorTest extends Specification {
 //				☼      ☼
 //				☼☼☼☼☼☼☼☼
 //			'''
-//			HandledGameBoard board = new HandledGameBoard(Utils.clearMap(map))
+//			GameBoard board = new GameBoard(Utils.clearMap(map))
 //			def bomberman = board.getBomberman()
-//			TypedBoardPoint competitor = board.getOtherBombermans().iterator().next()
+//			BoardPoint competitor = board.getOtherBombermans().iterator().next()
 //		when:
-//			TypedBoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
+//			BoardPoint nextPoint = pathCalculator.getNextPoint(board, competitor)
 //		then:
 //			nextPoint == bomberman.shiftLeft().get()
 //	}
