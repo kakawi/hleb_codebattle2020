@@ -1,22 +1,21 @@
-package ru.codebattle.client.handled.calculator;
+package ru.codebattle.client.handled.calculator.realise;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import ru.codebattle.client.api.BoardPoint;
+import com.hlebon.general.GeneralPoint;
 
 import java.util.Objects;
 
-@AllArgsConstructor
 @Getter
 @Setter
-public class PathPoint {
-	private double price;
-	private final BoardPoint point;
-	private PathPoint previousPoint;
+public class BombermanPoint extends GeneralPoint<BombermanPoint> {
 
-	public void addPrice(double additional) {
-		this.price += additional;
+	private final BoardPoint boardPoint;
+
+	public BombermanPoint(BombermanPoint previousPoint, double price, BoardPoint boardPoint) {
+		super(previousPoint, price);
+		this.boardPoint = boardPoint;
 	}
 
 	public int getTick() {
@@ -34,12 +33,12 @@ public class PathPoint {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		PathPoint pathPoint = (PathPoint) o;
-		return Objects.equals(point, pathPoint.point);
+		BombermanPoint that = (BombermanPoint) o;
+		return boardPoint.equals(that.boardPoint);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(point);
+		return Objects.hash(boardPoint);
 	}
 }

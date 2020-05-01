@@ -7,7 +7,8 @@ import ru.codebattle.client.api.GameBoard
 import ru.codebattle.client.api.TurnAction
 import ru.codebattle.client.api.BoardPoint
 import ru.codebattle.client.handled.calculator.PathCalculator
-import ru.codebattle.client.handled.calculator.PathValueCalculator
+import ru.codebattle.client.handled.calculator.realise.BombermanPathCalculator
+import ru.codebattle.client.handled.calculator.realise.BombermanPointCalculator
 import ru.codebattle.client.handled.strategy.move.NearestBombermanStrategy
 import ru.codebattle.client.handled.strategy.move.NearestWallStrategy
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager
@@ -22,7 +23,7 @@ import spock.lang.Unroll
 class TickHandlerTest extends Specification {
 
 	private DestinationStrategyManager strategyManager = new DestinationStrategyManager([new NearestWallStrategy()])
-	private PathCalculator pathCalculator = new PathCalculator(new PathValueCalculator())
+	private PathCalculator pathCalculator = new PathCalculator(new BombermanPathCalculator(new BombermanPointCalculator()))
 	private PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager([new SimplePlantStrategy()])
 	private BombsController bombsController = Mock()
 	private History history = Mock()

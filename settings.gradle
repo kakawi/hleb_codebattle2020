@@ -1,2 +1,2 @@
 rootProject.name = 'hleb_codebattle2020'
-
+include 'path-calculator'

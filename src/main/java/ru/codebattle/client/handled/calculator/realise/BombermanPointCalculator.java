@@ -1,31 +1,50 @@
-package ru.codebattle.client.handled.calculator;
+package ru.codebattle.client.handled.calculator.realise;
 
+import ru.codebattle.client.api.BoardPoint;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
-import ru.codebattle.client.api.GameBoard;
-import ru.codebattle.client.api.BoardPoint;
+import com.hlebon.general.GeneralPointCalculator;
 
-public class PathValueCalculator {
+public class BombermanPointCalculator extends GeneralPointCalculator<BombermanPoint> {
 
-	public double calculateValueForStep(
-			BoardPoint nextPoint, int tick, BoardPoint fromPoint, GameBoard gameBoard
-	) {
+	public BombermanPoint generateBombermanPoint(BoardPoint boardPoint, BombermanPoint currentPoint) {
+		double price = calculate(boardPoint, currentPoint.getTick());
+		return new BombermanPoint(currentPoint, currentPoint.getPrice() + price, boardPoint);
+	}
+
+	@Override
+	public boolean isNeedToRecalculate(BombermanPoint nextPoint, BombermanPoint currentPoint) {
+		return currentPoint.getBoardPoint().isNeighbour(nextPoint.getBoardPoint());
+	}
+
+	@Override
+	public BombermanPoint generateMinPoint(BombermanPoint nextPoint, BombermanPoint currentPoint) {
+		int tick = currentPoint.getTick();
+		BoardPoint boardPoint = nextPoint.getBoardPoint();
+		double price = calculate(boardPoint, tick);
+		if (nextPoint.getPrice() > currentPoint.getPrice() + price) {
+			return new BombermanPoint(currentPoint, currentPoint.getPrice() + price, nextPoint.getBoardPoint());
+		}
+		return nextPoint;
+	}
+
+	private double calculate(BoardPoint boardPoint, int tick) {
 		switch (tick) {
 			case 0:
-				return firstTick(nextPoint, fromPoint, gameBoard);
+				return firstTick(boardPoint);
 			case 1:
-				return secondTick(nextPoint);
+				return secondTick(boardPoint);
 			case 2:
-				return thirdTick(nextPoint);
+				return thirdTick(boardPoint);
 			case 3:
-				return forthTick(nextPoint);
+				return forthTick(boardPoint);
 			default:
-				return othersTick(nextPoint);
+				return othersTick(boardPoint);
 		}
 	}
 
 	private double firstTick(
-			BoardPoint nextPoint, BoardPoint fromPoint, GameBoard gameBoard
+			BoardPoint nextPoint
 	) {
 		ExplosionInfo explosionInfo = nextPoint.getExplosionInfo();
 		ExplosionStatus explosionStatus = explosionInfo.getStatus();

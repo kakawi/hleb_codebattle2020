@@ -4,7 +4,8 @@ import ru.codebattle.client.api.CodeBattleClient;
 import ru.codebattle.client.handled.TickHandler;
 import ru.codebattle.client.handled.TickHandlerImpl;
 import ru.codebattle.client.handled.calculator.PathCalculator;
-import ru.codebattle.client.handled.calculator.PathValueCalculator;
+import ru.codebattle.client.handled.calculator.realise.BombermanPathCalculator;
+import ru.codebattle.client.handled.calculator.realise.BombermanPointCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.move.NearestBombermanStrategy;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
@@ -21,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws URISyntaxException {
         DestinationStrategyManager destinationStrategyManager = new DestinationStrategyManager(Arrays.asList(new NearestBombermanStrategy()));
-        PathCalculator pathCalculator = new PathCalculator(new PathValueCalculator());
+        PathCalculator pathCalculator = new PathCalculator(new BombermanPathCalculator(new BombermanPointCalculator()));
         BombsController bombsController = new BombsControllerImpl();
         PlantStrategiesManager plantStrategiesManager = new PlantStrategiesManager(Arrays.asList(new SmartPlantStrategy(bombsController)));
         History history = new HistoryImpl();

@@ -3,11 +3,14 @@ package ru.codebattle.client.handled.calculator
 import ru.codebattle.client.api.GameBoard
 import ru.codebattle.client.api.BoardPoint
 import ru.codebattle.client.handled.Utils
+import ru.codebattle.client.handled.calculator.realise.BombermanPathCalculator
+import ru.codebattle.client.handled.calculator.realise.BombermanPointCalculator
 import spock.lang.Specification
 
 class PathCalculatorTest extends Specification {
 
-	private PathValueCalculator pathValueCalculator = new PathValueCalculator()
+	private BombermanPointCalculator bombermanPointCalculator = new BombermanPointCalculator()
+	private BombermanPathCalculator pathValueCalculator = new BombermanPathCalculator(bombermanPointCalculator)
 	private PathCalculator pathCalculator = new PathCalculator(pathValueCalculator)
 
 	def "move LEFT"() {

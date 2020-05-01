@@ -6,7 +6,8 @@ import ru.codebattle.client.handled.TickHandler;
 import ru.codebattle.client.handled.TickHandlerImpl;
 import ru.codebattle.client.handled.TickHandlerStopWatcher;
 import ru.codebattle.client.handled.calculator.PathCalculator;
-import ru.codebattle.client.handled.calculator.PathValueCalculator;
+import ru.codebattle.client.handled.calculator.realise.BombermanPathCalculator;
+import ru.codebattle.client.handled.calculator.realise.BombermanPointCalculator;
 import ru.codebattle.client.handled.strategy.move.DestinationStrategyManager;
 import ru.codebattle.client.handled.strategy.plant.BombsController;
 import ru.codebattle.client.handled.strategy.plant.PlantStrategiesManager;
@@ -22,13 +23,18 @@ public class TickHandlerConfig {
 	}
 
 	@Bean
-	public PathCalculator pathCalculator(PathValueCalculator pathValueCalculator) {
-		return new PathCalculator(pathValueCalculator);
+	public PathCalculator pathCalculator() {
+		return new PathCalculator(bombermanPathCalculator());
 	}
 
 	@Bean
-	public PathValueCalculator pathValueCalculator() {
-		return new PathValueCalculator();
+	public BombermanPathCalculator bombermanPathCalculator() {
+		return new BombermanPathCalculator(bombermanPointCalculator());
+	}
+
+	@Bean
+	public BombermanPointCalculator bombermanPointCalculator() {
+		return new BombermanPointCalculator();
 	}
 
 	@Bean
@@ -39,7 +45,11 @@ public class TickHandlerConfig {
 			BombsController bombsController,
 			History history
 	) {
-		TickHandlerImpl tickHandler = new TickHandlerImpl(destinationStrategyManager, pathCalculator, plantStrategiesManager, bombsController, history);
+		TickHandlerImpl tickHandler = new TickHandlerImpl(destinationStrategyManager,
+				pathCalculator,
+				plantStrategiesManager,
+				bombsController,
+				history);
 		return new TickHandlerStopWatcher(tickHandler);
 	}
 }

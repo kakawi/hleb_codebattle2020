@@ -1,36 +1,31 @@
 package ru.codebattle.client.handled.calculator;
 
 import ru.codebattle.client.api.BoardElement;
+import ru.codebattle.client.api.BoardPoint;
+import ru.codebattle.client.api.GameBoard;
 import ru.codebattle.client.handled.ExplosionInfo;
 import ru.codebattle.client.handled.ExplosionStatus;
-import ru.codebattle.client.api.GameBoard;
-import ru.codebattle.client.api.BoardPoint;
+import ru.codebattle.client.handled.calculator.realise.BombermanPathCalculator;
+import ru.codebattle.client.handled.calculator.realise.BombermanPoint;
 
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathCalculator {
 
-	private final PathValueCalculator pathValueCalculator;
+	private final BombermanPathCalculator bombermanPathCalculator;
 
-	public PathCalculator(PathValueCalculator pathValueCalculator) {this.pathValueCalculator = pathValueCalculator;}
+	public PathCalculator(BombermanPathCalculator bombermanPathCalculator) {this.bombermanPathCalculator = bombermanPathCalculator;}
 
 	public BoardPoint getNextPoint(GameBoard gameBoard, BoardPoint destinationPoint) {
 		BoardPoint initialPosition = gameBoard.getBomberman();
 
-		Set<PathPoint> alreadyOpenedPoints = new HashSet<>();
-		Set<PathPoint> visitedPoints = new HashSet<>();
-		PathPoint currentMinPoint = new PathPoint(0, initialPosition, null);
-		alreadyOpenedPoints.add(currentMinPoint);
-		visitedPoints.add(currentMinPoint);
-
-		Optional<PathPoint> optionalLastPoint = getPathToDestination(destinationPoint, currentMinPoint, alreadyOpenedPoints, visitedPoints, gameBoard);
+		Predicate<BombermanPoint> needToFinish = point -> destinationPoint.canBeDestroyedFrom(point.getBoardPoint());
+		BombermanPoint currentPoint = new BombermanPoint(null, 0, initialPosition);
+		Optional<BombermanPoint> optionalLastPoint = bombermanPathCalculator.getLastPoint(currentPoint, needToFinish);
 
 		// didn't find the way - Don't stand on the same place
 		if (optionalLastPoint.isEmpty()) {
@@ -38,30 +33,23 @@ public class PathCalculator {
 		}
 
 		// already stay where we want - Don't stand on the same place
-		if (optionalLastPoint.get().equals(currentMinPoint)) {
-//			if (doINeedToTrySurvive(initialPosition)) {
+		if (optionalLastPoint.get().getBoardPoint().equals(initialPosition)) {
 			return theBestMove(initialPosition);
-//			}
-//			return initialPosition;
 		}
 
-		PathPoint lastPathPoint = optionalLastPoint.get();
+		BombermanPoint lastPathPoint = optionalLastPoint.get();
 		while (lastPathPoint.getPreviousPoint().getPreviousPoint() != null) {
 			lastPathPoint = lastPathPoint.getPreviousPoint();
 		}
 
 		// don't allow to make a suicide move
-		ExplosionInfo nextMoveExplosionInfo = lastPathPoint.getPoint().getExplosionInfo();
+		ExplosionInfo nextMoveExplosionInfo = lastPathPoint.getBoardPoint().getExplosionInfo();
 		if (nextMoveExplosionInfo.getStatus() == ExplosionStatus.NEXT_TICK) {
 			// TODO recheck: do we need `find the best` or just stay
 			return theBestMove(initialPosition);
 		}
 
-		return lastPathPoint.getPoint();
-	}
-
-	private boolean doINeedToTrySurvive(BoardPoint initialPosition) {
-		return initialPosition.getExplosionInfo().getStatus() == ExplosionStatus.NEXT_TICK;
+		return lastPathPoint.getBoardPoint();
 	}
 
 	private BoardPoint theBestMove(BoardPoint centerPoint) {
@@ -93,80 +81,5 @@ public class PathCalculator {
 			return secondVariant;
 		}
 		return variants.get(0);
-	}
-
-	private Optional<PathPoint> getPathToDestination(
-			BoardPoint destinationPoint,
-			PathPoint currentMinPoint,
-			Set<PathPoint> alreadyOpenedPoints,
-			Set<PathPoint> visitedPoints, GameBoard gameBoard
-	) {
-		while (!destinationPoint.canBeDestroyedFrom(currentMinPoint.getPoint())) {
-			visitedPoints.add(currentMinPoint);
-			recalculatePrice(alreadyOpenedPoints, currentMinPoint, visitedPoints, gameBoard);
-
-			Set<PathPoint> newOpenedPoints = openNewPoints(currentMinPoint, alreadyOpenedPoints, gameBoard);
-			alreadyOpenedPoints.addAll(newOpenedPoints);
-
-			Optional<PathPoint> optionalPathPoint = getMinPoint(alreadyOpenedPoints, visitedPoints);
-			if (optionalPathPoint.isEmpty()) {
-				return Optional.empty();
-			}
-			currentMinPoint = optionalPathPoint.get();
-
-		}
-		return Optional.of(currentMinPoint);
-	}
-
-	private void recalculatePrice(
-			Set<PathPoint> alreadyOpenedPoints,
-			PathPoint currentMinPoint,
-			Set<PathPoint> visitedPoints,
-			GameBoard gameBoard
-	) {
-		for (PathPoint openedPoint : alreadyOpenedPoints) {
-			if (visitedPoints.contains(openedPoint)) {
-				continue;
-			}
-			if (!currentMinPoint.getPoint().isNeighbour(openedPoint.getPoint())) {
-				continue;
-			}
-
-			double recalculatedPrice = pathValueCalculator.calculateValueForStep(openedPoint.getPoint(), currentMinPoint.getTick(), currentMinPoint.getPoint(), gameBoard);
-			double fullPrice = currentMinPoint.getPrice() + recalculatedPrice;
-			if (openedPoint.getPrice() > fullPrice) {
-				openedPoint.setPrice(fullPrice);
-				openedPoint.setPreviousPoint(currentMinPoint);
-			}
-		}
-	}
-
-	private Optional<PathPoint> getMinPoint(
-			Set<PathPoint> openedPoints, Set<PathPoint> visitedPoints
-	) {
-		return openedPoints.stream()
-						   .filter(point -> !visitedPoints.contains(point))
-						   .min(Comparator.comparingDouble(PathPoint::getPrice));
-	}
-
-	private Set<PathPoint> openNewPoints(
-			PathPoint centralPathPoint, Set<PathPoint> alreadyOpenedPoints, GameBoard gameBoard
-	) {
-		BoardPoint centerPoint = centralPathPoint.getPoint();
-		return Stream.of(centerPoint.shiftTop(), centerPoint.shiftRight(), centerPoint.shiftBottom(), centerPoint.shiftLeft())
-					 .filter(Optional::isPresent)
-					 .map(Optional::get)
-					 .filter(firstTickFilter(centralPathPoint))
-					 .map(point -> {
-						 double price = pathValueCalculator.calculateValueForStep(point, centralPathPoint.getTick(), centerPoint, gameBoard);
-						 return new PathPoint(centralPathPoint.getPrice() + price, point, centralPathPoint);
-					 })
-					 .filter(pathPoint -> !alreadyOpenedPoints.contains(pathPoint))
-					 .collect(Collectors.toSet());
-	}
-
-	private Predicate<BoardPoint> firstTickFilter(PathPoint centralPathPoint) {
-		return point -> centralPathPoint.getTick() == 0 && point.getBoardElement().isNextTickPassable()
-				|| centralPathPoint.getTick() != 0 && point.getBoardElement().isPassable();
 	}
 }
